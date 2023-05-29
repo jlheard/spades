@@ -37,11 +37,17 @@ body {
 .card {
   display: inline-block;
   width: 90px;
-  height: 120px;
+  height: 130px;
   border: 1px solid #000;
   border-radius: 5px;
   background-color: #fff;
   margin-right: 5px;
+  margin-bottom: 5px; /* Add margin-bottom to create spacing between cards */
+}
+
+.card-group {
+  display: inline-block; /* Change display property to inline-block */
+  margin-right: 10px; /* Add margin-right to create spacing between card groups */
 }
 
 .card.suit-hearts {
