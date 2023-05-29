@@ -33,6 +33,13 @@ body {
   min-height: 100px;
 }
 
+.play-area {
+  border: 1px solid #ccc;
+  padding: 10px;
+  min-height: 100px;
+  margin: 0 20px; /* Add horizontal margin to create space in the middle */
+}
+
 /* Card styles */
 .card {
   display: inline-block;
