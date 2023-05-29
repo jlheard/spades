@@ -30,6 +30,10 @@ export function assert(condition, message) {
 
 export function test(description, testFunction) {
   try {
+    if(beforeEachSetupFunction)
+    {
+      beforeEachSetupFunction();
+    }
     testFunction();
     logTestResult(true, description);
   } catch (error) {

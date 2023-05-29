@@ -2,12 +2,16 @@
 
 import { Game } from '../game.js';
 import { Player } from '../player.js';
-import { test, assert, setTestFile } from './testUtils.js';
+import { test, assert, setTestFile, beforeEach } from './testUtils.js';
 
 export function gameTest() {
   setTestFile("game.test.js")
 
-  let game = new Game();
+  let game;
+
+  beforeEach(() => {
+    game = new Game();
+  });  
 
   test('Setting the partner should establish the proper partnerships', () => {
     const you = new Player('You');
@@ -27,8 +31,6 @@ export function gameTest() {
   });
 
   test('Each player should have 13 cards after dealing hands', () => {
-    game.dealHands(game.players); // Pass the players array to dealHands method
-
     for (const player of game.players) {
       assert(player.hand.length === 13, `${player.name} should have 13 cards`);
     }
