@@ -36,36 +36,26 @@ body {
 /* Card styles */
 .card {
   display: inline-block;
-  width: 60px;
-  height: 90px;
+  width: 90px;
+  height: 120px;
   border: 1px solid #000;
   border-radius: 5px;
   background-color: #fff;
   margin-right: 5px;
 }
 
-.card.rank {
-  font-weight: bold;
-  font-size: 16px;
-  margin-bottom: 5px;
-}
-
-.card.suit {
-  font-size: 14px;
-}
-
-.card.suit.hearts {
+.card.suit-hearts {
   color: red;
 }
 
-.card.suit.diamonds {
+.card.suit-diamonds {
   color: red;
 }
 
-.card.suit.clubs {
+.card.suit-clubs {
   color: black;
 }
 
-.card.suit.spades {
+.card.suit-spades {
   color: black;
 }
