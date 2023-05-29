@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Spades Game</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <h1>Spades Game</h1>
+  <div class="seat" id="north">
+    <div class="name">North</div>
+    <div class="cards"></div>
+  </div>
+  <div class="seat" id="west">
+    <div class="name">West</div>
+    <div class="cards"></div>
+  </div>
+  <div class="seat" id="south">
+    <div class="name">South</div>
+    <div class="cards"></div>
+  </div>
+  <div class="seat" id="east">
+    <div class="name">East</div>
+    <div class="cards"></div>
+  </div>
+
+  <script src="js/game.js"></script>
+</body>
+</html>
