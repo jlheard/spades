@@ -33,13 +33,6 @@ body {
   min-height: 100px;
 }
 
-.play-area {
-  border: 1px solid #ccc;
-  padding: 10px;
-  min-height: 100px;
-  margin: 0 20px; /* Add horizontal margin to create space in the middle */
-}
-
 /* Card styles */
 .card {
   display: inline-block;
@@ -51,6 +44,11 @@ body {
   margin-right: 5px;
   margin-bottom: 5px; /* Add margin-bottom to create spacing between cards */
 }
+
+.card.selected {
+  background-color: #f0f0f0; /* Light gray color */
+}
+
 
 .card-group {
   display: inline-block; /* Change display property to inline-block */
