@@ -1,7 +1,7 @@
 // game.test.js
 
-import { Game } from '../js/game.js';
-import { Player } from '../js/player.js';
+import { Game } from '../game.js';
+import { Player } from '../player.js';
 import { test, assert, setTestFile } from './testUtils.js';
 
 export function gameTest() {

@@ -1,4 +1,4 @@
-import { shuffleDeck, dealCards, initializeDeck } from '../js/deck.js';
+import { shuffleDeck, dealCards, initializeDeck } from '../deck.js';
 import { beforeEach, test, assert, setTestFile } from './testUtils.js';
 
 export function deckTest() {
