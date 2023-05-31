@@ -27,15 +27,9 @@ export class Game {
 
         this.dealHands();
 
-        // Set hands to players
-        this.players.forEach(player => {
-            const hand = player.hand;
-            player.setHand(hand);
-        });
-
         // Sort the cards in the player's hand
         this.players.forEach(player => {
-            player.sortHand();
+            player.hand.sortCards();
         });
 
         // Populate the cards in the hand of player "You"

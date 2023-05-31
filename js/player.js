@@ -1,34 +1,26 @@
 // player.js
 
 import { getSuitSymbol } from './deck.js';
-
-const rankOrder = ['BigJoker', 'ExtraJoker', 'A', 'K', 'Q', 'J', '10', '9', '8', '7', '6', '5', '4', '3', '2'];
+import { Hand, RANK_ORDER } from './hand.js';
 
 export class Player {
     constructor(name, isComputer = false) {
-        this.name = name;
-        this.hand = [];
-        this.partner = null;
-        this.isComputer = isComputer;
+      this.name = name;
+      this.hand = new Hand();
+      this.partner = null;
+      this.isComputer = isComputer;
     }
-
+  
     setPartner(partner) {
-        this.partner = partner;
+      this.partner = partner;
     }
-
+  
     setHand(hand) {
-        this.hand = hand;
+      this.hand.setCards(hand);
     }
-
-    sortHand() {
-        this.hand.sort((a, b) => {
-            if (a.suit !== b.suit) {
-                const suitOrder = ['spades', 'hearts', 'diamonds', 'clubs'];
-                return suitOrder.indexOf(a.suit) - suitOrder.indexOf(b.suit);
-            } else {
-                return rankOrder.indexOf(a.rank) - rankOrder.indexOf(b.rank);
-            }
-        });
+  
+    getHand() {
+      return this.hand;
     }
 
     populateHandElement(handElement) {
@@ -39,7 +31,7 @@ export class Player {
         handElement.innerHTML = '';
 
         const cardsBySuit = {};
-        this.hand.forEach(card => {
+        this.hand.cards.forEach(card => {
             if (!cardsBySuit[card.suit]) {
                 cardsBySuit[card.suit] = [];
             }
@@ -47,7 +39,7 @@ export class Player {
         });
 
         Object.values(cardsBySuit).forEach(cards => {
-            cards.sort((a, b) => rankOrder.indexOf(a.rank) - rankOrder.indexOf(b.rank));
+            cards.sort((a, b) => RANK_ORDER.indexOf(a.rank) - RANK_ORDER.indexOf(b.rank));
 
             const cardGroup = document.createElement('div');
             cardGroup.classList.add('card-group');

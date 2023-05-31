@@ -32,7 +32,7 @@ export function gameTest() {
 
   test('Each player should have 13 cards after dealing hands', () => {
     for (const player of game.players) {
-      assert(player.hand.length === 13, `${player.name} should have 13 cards`);
+      assert(player.hand.getCards().length === 13, `${player.name} should have 13 cards`);
     }
   });
 }

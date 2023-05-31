@@ -70,7 +70,7 @@ export class Turn {
         // ...      
 
         // Example: Remove the first card from the computer player's hand
-        const playedCard = this.currentPlayer.hand.shift();
+        const playedCard = this.currentPlayer.hand.getCards().shift();
 
         // Update the UI by creating a new card element for the played card
         const cardElement = document.createElement('div');

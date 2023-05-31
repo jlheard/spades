@@ -1,11 +1,11 @@
 // Define the ranks and suits for the cards
-const ranks = ['A', 'K', 'Q', 'J', '10', '9', '8', '7', '6', '5', '4', '3', '2'];
-const suits = ['Spades', 'Hearts', 'Diamonds', 'Clubs'];
+const RANKS = ['A', 'K', 'Q', 'J', '10', '9', '8', '7', '6', '5', '4', '3', '2'];
+export const SUITS = ['Spades', 'Hearts', 'Diamonds', 'Clubs'];
 export class Deck {
     constructor() {
         this.cards = [];
-        for (const suit of suits) {
-            for (const rank of ranks) {
+        for (const suit of SUITS) {
+            for (const rank of RANKS) {
                 if (rank === '2' && (suit === 'Hearts' || suit === 'Clubs')) {
                     // Omit 2 of Clubs and 2 of Hearts
                     continue;
