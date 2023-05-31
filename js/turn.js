@@ -30,7 +30,7 @@ export class Turn {
                     // Clear the play area
                     playAreaElement.innerHTML = '';
                     this.putCardInPile(playAreaElement);
-                    this.playNextTurn();
+                    this.nextComputerTurn();
                 } else {
                     this.selectedCard.classList.remove('selected');
                     this.selectedCard = clickedCardElement;
@@ -50,9 +50,6 @@ export class Turn {
             this.selectedCard.classList.remove('selected');
             this.selectedCard = null;
             this.cardNotPlayed = false;
-
-            // It's the player's turn, so initiate the turn for the next computer player
-            this.nextComputerTurn();
         }
     }
 
