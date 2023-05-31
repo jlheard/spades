@@ -55,6 +55,7 @@ export class Player {
             cards.forEach(card => {
                 const cardElement = document.createElement('div');
                 cardElement.classList.add('card');
+                cardElement.classList.add('south');
                 cardElement.classList.add(`suit-${card.suit.toLowerCase()}`);
                 cardElement.innerHTML = `<div class="card-content">${card.rank}&nbsp;${getSuitSymbol(card.suit)}</div>`;
                 cardGroup.appendChild(cardElement);

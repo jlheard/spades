@@ -8,6 +8,7 @@ export class Turn {
         this.currentPlayer = this.players[this.currentPlayerIndex];
         this.selectedCard = null;
         this.cardNotPlayed = true;
+        this.computerCardsPlayed = 0;
 
         this.playerHandElement.addEventListener('click', this.handleCardClick.bind(this));
 
@@ -50,28 +51,14 @@ export class Turn {
             this.selectedCard = null;
             this.cardNotPlayed = false;
 
-            // Automatically play a card for the computer player
-            if (this.currentPlayer !== 'You') {
-                this.computerPlayCard();
-            } else {
-                // It's the player's turn, so initiate the turn for the next computer player
-                this.nextComputerTurn();
-            }
+            // It's the player's turn, so initiate the turn for the next computer player
+            this.nextComputerTurn();
         }
     }
 
-
     nextComputerTurn() {
-        const currentPlayerIndex = this.players.findIndex(player => player.name === this.currentPlayer);
-        const nextPlayerIndex = (currentPlayerIndex + 1) % this.players.length;
-        const nextPlayer = this.players[nextPlayerIndex];
-
-        if (nextPlayer.name !== 'You') {
-            setTimeout(() => {
-                this.currentPlayer = nextPlayer.name;
-                this.computerPlayCard();
-            }, 1000);
-        }
+        this.setNextPlayerToCurrent()
+        this.computerPlayCard();
     }
 
 
@@ -83,7 +70,7 @@ export class Turn {
 
     computerPlayCard() {
         // Add your logic for the computer player to select and play a card from their hand
-        // ...
+        // ...      
 
         // Example: Remove the first card from the computer player's hand
         const playedCard = this.currentPlayer.hand.shift();
@@ -91,6 +78,7 @@ export class Turn {
         // Update the UI by creating a new card element for the played card
         const cardElement = document.createElement('div');
         cardElement.classList.add('card');
+        cardElement.classList.add(this.currentPlayer.name.toLowerCase());
         cardElement.classList.add(`suit-${playedCard.suit.toLowerCase()}`);
         cardElement.innerHTML = `<div class="card-content">${playedCard.rank}&nbsp;${getSuitSymbol(playedCard.suit)}</div>`;
 
@@ -98,21 +86,30 @@ export class Turn {
         const playAreaElement = document.querySelector('.play-area');
         playAreaElement.appendChild(cardElement);
 
-        // Pass the turn to the next player
-        this.playNextTurn();
+        this.computerCardsPlayed++;
+
+        if (this.computerCardsPlayed <= 3) {
+            // Pass the turn to the next player
+            this.playNextTurn();
+
+            if (this.computerCardsPlayed == 3) {
+                this.computerCardsPlayed = 0;
+            }
+        }
+
     }
 
     playNextTurn() {
-        // Update the current player index
-        this.currentPlayerIndex = (this.currentPlayerIndex + 1) % this.players.length;
+        // Play the card for the current player
+        this.setNextPlayerToCurrent();
+        this.playCard();
+        this.cardNotPlayed = true;
+    }
 
-        // Update the current player
-        this.currentPlayer = this.players[this.currentPlayerIndex];
-
-        if (this.currentPlayerIndex < 3) {
-            // Play the card for the current player
-            this.playCard();
-            this.cardNotPlayed = true;
-        }
+    setNextPlayerToCurrent() {
+        const currentPlayerIndex = this.players.findIndex(player => player.name === this.currentPlayer.name);
+        const nextPlayerIndex = (currentPlayerIndex + 1) % this.players.length;
+        this.currentPlayer = this.players[nextPlayerIndex];
+        this.currentPlayerIndex = nextPlayerIndex;
     }
 }

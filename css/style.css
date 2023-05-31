@@ -15,6 +15,7 @@ body {
 .row {
   display: flex;
   justify-content: center;
+  margin-top: 50px;
 }
 
 .seat {
@@ -49,7 +50,6 @@ body {
   background-color: #f0f0f0; /* Light gray color */
 }
 
-
 .card-group {
   display: inline-block; /* Change display property to inline-block */
   margin-right: 10px; /* Add margin-right to create spacing between card groups */
@@ -69,4 +69,40 @@ body {
 
 .card.suit-spades {
   color: black;
+}
+
+/* Play area styles */
+.play-area {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  grid-template-rows: 1fr 1fr 1fr;
+  gap: 10px;
+  width: 300px;
+  height: 400px;
+}
+
+.play-area .card {
+  border: 1px solid #000;
+  border-radius: 5px;
+  background-color: #fff;
+}
+
+.play-area .card.north {
+  grid-column: 2;
+  grid-row: 1;
+}
+
+.play-area .card.west {
+  grid-column: 1;
+  grid-row: 2;
+}
+
+.play-area .card.east {
+  grid-column: 3;
+  grid-row: 2;
+}
+
+.play-area .card.south {
+  grid-column: 2;
+  grid-row: 3;
 }

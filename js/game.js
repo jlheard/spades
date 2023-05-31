@@ -22,7 +22,8 @@ export class Game {
         east.setPartner(west);
         west.setPartner(east);
 
-        this.players.push(you, north, east, west);
+        // this sets the initial turn but it will need to be updated later
+        this.players.push(you, west, north, east);
 
         this.dealHands();
 
