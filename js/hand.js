@@ -39,4 +39,11 @@ export class Hand {
     
         return legalPlaysMap;
     }
+
+    removeCard(card) {
+        const index = this.cards.findIndex(c => c.rank === card.rank && c.suit === card.suit);
+        if (index !== -1) {
+          this.cards.splice(index, 1);
+        }
+      }    
 }

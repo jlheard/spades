@@ -89,6 +89,42 @@ export function handTest() {
         // Assert
         assert(legalPlaysMap.size === 0, 'No legal plays available');
     });
+
+    test('Hand - removeCard() removes the specified card from the hand', () => {
+        // Arrange
+        const hand = new Hand();
+        const card1 = new Card('A', 'Hearts');
+        const card2 = new Card('10', 'Hearts');
+        const card3 = new Card('K', 'Spades');
+        const card4 = new Card('7', 'Clubs');
+        hand.setCards([card1, card2, card3, card4]);
+
+        // Act
+        hand.removeCard(card2);
+
+        // Assert
+        const remainingCards = hand.getCards();
+        assert(
+            remainingCards.length === 3,
+            'Number of cards is correct after removal'
+        );
+        assert(
+            remainingCards.includes(card1),
+            'Card 1 is still present in the hand'
+        );
+        assert(
+            !remainingCards.includes(card2),
+            'Card 2 is removed from the hand'
+        );
+        assert(
+            remainingCards.includes(card3),
+            'Card 3 is still present in the hand'
+        );
+        assert(
+            remainingCards.includes(card4),
+            'Card 4 is still present in the hand'
+        );
+    });    
     
 }
 

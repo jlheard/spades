@@ -47,13 +47,20 @@ export class Turn {
 
     putCardInPile(playAreaElement) {
         if (this.selectedCard) {
-            this.selectedCard.parentElement.removeChild(this.selectedCard);
-            playAreaElement.appendChild(this.selectedCard);
-            this.selectedCard.classList.remove('selected');
-            this.selectedCard = null;
-            this.cardNotPlayed = false;
+          this.selectedCard.parentElement.removeChild(this.selectedCard);
+          playAreaElement.appendChild(this.selectedCard);
+          this.selectedCard.classList.remove('selected');
+      
+          // Remove the card from the player's hand
+          const card = Card.fromCardContentDivElement(this.selectedCard.querySelector('.card-content'));
+          this.currentPlayer.hand.removeCard(card);
+      
+          this.selectedCard = null;
+          this.cardNotPlayed = false;
         }
-    }
+      }
+      
+      
 
     nextComputerTurn() {
         this.setNextPlayerToCurrent()
