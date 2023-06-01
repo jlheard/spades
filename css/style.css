@@ -47,7 +47,7 @@ body {
 }
 
 .card.selected {
-  background-color: #f0f0f0; /* Light gray color */
+  background-color:  #ffffe0 /* Light yellow color */
 }
 
 .card-group {
@@ -69,6 +69,10 @@ body {
 
 .card.suit-spades {
   color: black;
+}
+
+.card.valid-play {
+  background-color: white; /* Background color for valid plays */
 }
 
 /* Play area styles */
@@ -106,3 +110,13 @@ body {
   grid-column: 2;
   grid-row: 3;
 }
+
+.seat#south .cards .card {
+  background-color: #f0f0f0; /* Light gray color */
+}
+
+.seat#south .cards .card.valid-play {
+  background-color: #fff; /* White color */
+}
+
+/* Other CSS rules */
