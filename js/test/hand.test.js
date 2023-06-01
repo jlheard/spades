@@ -1,7 +1,7 @@
 // hand.test.js
 
+import { Card, SUITS } from '../card.js';
 import { Hand, RANK_ORDER } from '../hand.js';
-import { SUITS } from '../deck.js';
 import { assert, test, beforeEach, setTestFile } from './testUtils.js';
 
 export function handTest() {
@@ -50,45 +50,45 @@ export function handTest() {
         }
     });
 
-    test('Hand - getLegalPlays() returns an array of legal plays', () => {
+    test('Hand - getLegalPlaysMap() returns a map of legal plays with card indexes', () => {
         // Arrange
         const hand = new Hand();
         hand.setCards([
-            { suit: 'Hearts', rank: 'A' },
-            { suit: 'Hearts', rank: '10' },
-            { suit: 'Spades', rank: 'K' },
-            { suit: 'Clubs', rank: '7' },
+            new Card('A', 'Hearts'),
+            new Card('10', 'Hearts'),
+            new Card('K', 'Spades'),
+            new Card('7','Clubs'),
         ]);
-
+    
         const leadingSuit = 'Hearts';
         const spadesBroken = true;
-
+    
         // Act
-        const result = hand.getLegalPlays(leadingSuit, spadesBroken, hand);
-
+        const legalPlaysMap = hand.getLegalPlaysMap(leadingSuit, spadesBroken);
+    
         // Assert
-        assert(result.length === 2, 'Correct number of legal plays');
-        assert(result.some(c => c.suit === 'Hearts' && c.rank === '10'), 'Legal play - Hearts 10');
-        assert(result.some(c => c.suit === 'Hearts' && c.rank === 'A'), 'Legal play - Hearts A');
+        assert(legalPlaysMap.size === 2, 'Correct number of legal plays');
+        assert(legalPlaysMap.has(1), 'Legal play - Hearts 10');
+        assert(legalPlaysMap.has(0), 'Legal play - Hearts A');
     });
-
-    test('Hand - getLegalPlays() returns an empty array when no legal plays are available', () => {
+    
+    test('Hand - getLegalPlaysMap() returns an empty map when no legal plays are available', () => {
         // Arrange
         const hand = new Hand();
         hand.setCards([
-            { suit: 'Spades', rank: 'J' },
-            { suit: 'Spades', rank: '5' },
+            new Card('J', 'Spades'),
+            new Card('5', 'Spades'),
         ]);
-
+    
         const leadingSuit = 'Spades';
         const spadesBroken = false;
-
+    
         // Act
-        const result = hand.getLegalPlays(leadingSuit, spadesBroken, hand);
-
+        const legalPlaysMap = hand.getLegalPlaysMap(leadingSuit, spadesBroken);
+    
         // Assert
-        assert(result.length === 0, 'No legal plays available');
+        assert(legalPlaysMap.size === 0, 'No legal plays available');
     });
-
+    
 }
 

@@ -1,28 +1,26 @@
-import { Card } from './card.js';
-
-export const RANKS = ['A', 'K', 'Q', 'J', '10', '9', '8', '7', '6', '5', '4', '3', '2'];
-export const SUITS = ['Spades', 'Hearts', 'Diamonds', 'Clubs'];
+import { Card, RANKS, SUITS } from './card.js';
 
 export class Deck {
     constructor() {
         this.cards = [];
-
+      
         for (const suit of SUITS) {
-            for (const rank of RANKS) {
-                if (rank === '2' && (suit === 'Hearts' || suit === 'Clubs')) {
-                    // Omit 2 of Clubs and 2 of Hearts
-                    continue;
-                }
-                const card = new Card(rank, suit);
-                this.cards.push(card);
+          for (const rank of RANKS) {
+            if ((rank === '2' && (suit === 'Hearts' || suit === 'Clubs')) || (rank === 'BigJoker' || rank === 'ExtraJoker')) {
+              // Omit 2 of Clubs, 2 of Hearts, BigJoker, and ExtraJoker
+              continue;
             }
+            const card = new Card(rank, suit);
+            this.cards.push(card);
+          }
         }
-
+      
         // Add the jokers to the deck
         const bigJoker = new Card('BigJoker', 'Spades');
         const extraJoker = new Card('ExtraJoker', 'Spades');
         this.cards.push(bigJoker, extraJoker);
-    }
+      }
+      
 
     // Function to shuffle the deck
     shuffleDeck() {

@@ -1,43 +1,52 @@
+export const RANKS = ['BigJoker', 'ExtraJoker', 'A', 'K', 'Q', 'J', '10', '9', '8', '7', '6', '5', '4', '3', '2'];
+export const SUITS = ['Spades', 'Hearts', 'Diamonds', 'Clubs'];
+
 export class Card {
-    constructor(rank, suit) {
-      this.rank = rank;
-      this.suit = suit;
+  constructor(rank, suit) {
+    if (!RANKS.includes(rank)) {
+      throw new Error(`Invalid card rank: ${rank}`);
     }
-  
-    equals(other) {
-      if (this === other) {
-        return true;
-      }
-  
-      if (!(other instanceof Card)) {
-        return false;
-      }
-  
-      return this.rank === other.rank && this.suit === other.suit;
+
+    if (!SUITS.includes(suit)) {
+      throw new Error(`Invalid card suit: ${suit}`);
     }
-  
-    hashCode() {
-      let hash = 17;
-      hash = hash * 31 + this.rank.hashCode();
-      hash = hash * 31 + this.suit.hashCode();
-      return hash;
-    }
-  
-    toString() {
-      return `${this.rank} of ${this.suit}`;
-    }
+
+    this.rank = rank;
+    this.suit = suit;
   }
+
+  equals(card) {
+    return this.rank === card.rank && this.suit === card.suit;
+  }
+
+  hashCode() {
+    const rankCode = this.rank.charCodeAt(0);
+    const suitCode = this.suit.charCodeAt(0);
+    const prime = 31; // Prime number for hashing
   
-  String.prototype.hashCode = function() {
-    let hash = 0;
-    if (this.length === 0) {
-      return hash;
-    }
-    for (let i = 0; i < this.length; i++) {
-      const char = this.charCodeAt(i);
-      hash = (hash << 5) - hash + char;
-      hash = hash & hash; // Convert to 32-bit integer
-    }
-    return hash;
-  };
+    let result = 1;
+    result = prime * result + rankCode;
+    result = prime * result + suitCode;
   
+    return result;
+  }
+
+  toString() {
+    return `${this.rank} of ${this.suit}`;
+  }
+}
+
+export function getSuitSymbol(suit) {
+  switch (suit) {
+    case 'Hearts':
+      return '&hearts;';
+    case 'Diamonds':
+      return '&diams;';
+    case 'Clubs':
+      return '&clubs;';
+    case 'Spades':
+      return '&spades;';
+    default:
+      return '';
+  }
+}

@@ -1,4 +1,4 @@
-import { SUITS } from './deck.js';
+import { SUITS } from './card.js';
 import { LegalPlayRules } from './legalPlayRules.js';
 
 export const RANK_ORDER = ['BigJoker', 'ExtraJoker', 'A', 'K', 'Q', 'J', '10', '9', '8', '7', '6', '5', '4', '3', '2'];
@@ -26,16 +26,17 @@ export class Hand {
         });
     }
 
-    getLegalPlays(leadingSuit, spadesBroken) {
-        const legalPlays = [];
+    getLegalPlaysMap(leadingSuit, spadesBroken) {
+        const legalPlaysMap = new Map();
 
-        let handDoesNotHaveLeadingSuit = !this.cards.some(c => c.suit === leadingSuit)
-
-        for (const card of this.cards) {
+        let handDoesNotHaveLeadingSuit = !this.cards.some(c => c.suit === leadingSuit);
+    
+        this.cards.forEach((card, index) => {
             if (LegalPlayRules.isCardLegalToPlay(card, leadingSuit, spadesBroken, handDoesNotHaveLeadingSuit)) {
-                legalPlays.push(card);
+                legalPlaysMap.set(index, card);
             }
-        }
-        return legalPlays;
+        });
+    
+        return legalPlaysMap;
     }
 }
