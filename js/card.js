@@ -15,6 +15,14 @@ export class Card {
     this.suit = suit;
   }
 
+  static fromCardContentDivElement(element) {
+    const rankAndSymbol = element.innerHTML.trim().split('&nbsp;');
+    const symbol = rankAndSymbol[1];
+    const suit = getSuitFromSymbol(symbol);
+    const rank = rankAndSymbol[0];
+    return new Card(rank, suit);
+  }
+
   equals(card) {
     return this.rank === card.rank && this.suit === card.suit;
   }
@@ -46,6 +54,21 @@ export function getSuitSymbol(suit) {
       return '&clubs;';
     case 'Spades':
       return '&spades;';
+    default:
+      return '';
+  }
+}
+
+export function getSuitFromSymbol(symbol) {
+  switch (symbol) {
+    case '♥':
+      return 'Hearts';
+    case '♦':
+      return 'Diamonds';
+    case '♣':
+      return 'Clubs';
+    case '♠':
+      return 'Spades';
     default:
       return '';
   }

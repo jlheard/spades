@@ -1,4 +1,4 @@
-import { Card } from '../card.js';
+import { Card, getSuitFromSymbol } from '../card.js';
 import { assert, test, beforeEach, setTestFile } from './testUtils.js';
 
 export function cardTest() {
@@ -54,5 +54,36 @@ export function cardTest() {
 
     // Assert
     assert(result === 'Q of Diamonds', 'toString() should return the expected string representation of the card');
+  });
+
+  test('Card - fromCardContentDivElement() creates a new card object from an element', () => {
+    // Arrange
+    const element = document.createElement('div');
+    element.classList.add('card-content');
+    element.innerHTML = 'A&nbsp;♠';
+  
+    // Act
+    const card = Card.fromCardContentDivElement(element);
+  
+    // Assert
+    assert(card.rank === 'A', 'The rank of the created card should match the element');
+    assert(card.suit === 'Spades', 'The suit of the created card should match the element');
+  });  
+
+  test('getSuitFromSymbol() returns the suit for a given symbol', () => {
+    // Arrange
+    const symbols = ['♥', '♦', '♣', '♠'];
+    const expectedSuits = ['Hearts', 'Diamonds', 'Clubs', 'Spades'];
+  
+    symbols.forEach((symbol, index) => {
+      // Act
+      const suit = getSuitFromSymbol(symbol);
+  
+      // Assert
+      assert(
+        suit === expectedSuits[index],
+        `The suit should be "${expectedSuits[index]}" for the symbol "${symbol}"`
+      );
+    });
   });
 }

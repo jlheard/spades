@@ -112,11 +112,11 @@ body {
 }
 
 .seat#south .cards .card {
-  background-color: #f0f0f0; /* Light gray color */
+  background-color: #f0f0f0; 
 }
 
 .seat#south .cards .card.valid-play {
-  background-color: #fff; /* White color */
+  background-color: #fff;
 }
 
 /* Other CSS rules */
