@@ -1,21 +1,27 @@
-// Define the ranks and suits for the cards
-const RANKS = ['A', 'K', 'Q', 'J', '10', '9', '8', '7', '6', '5', '4', '3', '2'];
+import { Card } from './card.js';
+
+export const RANKS = ['A', 'K', 'Q', 'J', '10', '9', '8', '7', '6', '5', '4', '3', '2'];
 export const SUITS = ['Spades', 'Hearts', 'Diamonds', 'Clubs'];
+
 export class Deck {
     constructor() {
         this.cards = [];
+
         for (const suit of SUITS) {
             for (const rank of RANKS) {
                 if (rank === '2' && (suit === 'Hearts' || suit === 'Clubs')) {
                     // Omit 2 of Clubs and 2 of Hearts
                     continue;
                 }
-                this.cards.push({ rank, suit });
+                const card = new Card(rank, suit);
+                this.cards.push(card);
             }
         }
+
         // Add the jokers to the deck
-        this.cards.push({ rank: 'BigJoker', suit: 'Spades' });
-        this.cards.push({ rank: 'ExtraJoker', suit: 'Spades' });
+        const bigJoker = new Card('BigJoker', 'Spades');
+        const extraJoker = new Card('ExtraJoker', 'Spades');
+        this.cards.push(bigJoker, extraJoker);
     }
 
     // Function to shuffle the deck
@@ -31,7 +37,7 @@ export class Deck {
     // Function to deal cards from the deck
     dealCards(numCards) {
         if (numCards <= this.cards.length) {
-            return this.cards.splice(0, numCards );
+            return this.cards.splice(0, numCards);
         } else {
             console.log('Not enough cards in the deck!');
             return [];
