@@ -23,7 +23,7 @@ export class Player {
       return this.hand;
     }
 
-    populateHandElement(handElement) {
+    populateHandElement(handElement, spadesBroken = false) {
       if (!handElement) {
         return;
       }
@@ -38,7 +38,7 @@ export class Player {
         cardsBySuit[card.suit].push(card);
       });
     
-      const validPlaysMap = this.hand.getLegalPlaysMap(null, false);
+      const validPlaysMap = this.hand.getLegalPlaysMap(null, spadesBroken);
       const validPlays = Array.from(validPlaysMap.values());
     
       Object.values(cardsBySuit).forEach(cards => {
@@ -65,4 +65,9 @@ export class Player {
         handElement.appendChild(cardGroup);
       });
     } 
+
+    updateHandElement(spadesBroken) {
+      const handElement = document.getElementById('player-hand');
+      this.populateHandElement(handElement, spadesBroken);
+    }    
 }
