@@ -16,11 +16,11 @@ export class Game {
         const east = new Player('East', true);
         const west = new Player('West', true);
 
-        // Set partnerships
-        you.setPartner(north);
-        north.setPartner(you);
-        east.setPartner(west);
-        west.setPartner(east);
+        // Set teams
+        you.setTeam(1);
+        north.setTeam(1);
+        east.setTeam(2);
+        west.setTeam(2);
 
         // this sets the initial turn but it will need to be updated later
         this.players.push(you, west, north, east);

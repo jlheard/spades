@@ -8,12 +8,12 @@ export class Player {
     constructor(name, isComputer = false) {
       this.name = name;
       this.hand = new Hand();
-      this.partner = null;
+      this.team = null;
       this.isComputer = isComputer;
     }
   
-    setPartner(partner) {
-      this.partner = partner;
+    setTeam(teamNumber) {
+      this.team = teamNumber;
     }
   
     setHand(hand) {

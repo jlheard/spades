@@ -1,5 +1,6 @@
 import { Card } from './card.js';
 import { getSuitSymbol } from './deck.js';
+import { compareCardsForTurn } from './cardComparer.js';
 
 export class Turn {
     constructor(players, playerHandElement) {
@@ -11,6 +12,7 @@ export class Turn {
         this.cardNotPlayed = true;
         this.computerCardsPlayed = 0;
         this.spadesBroken = false;
+        this.playedCards = new Map(); // Map to track played cards and corresponding players
 
         this.playerHandElement.addEventListener('click', this.handleCardClick.bind(this));
 
@@ -55,6 +57,9 @@ export class Turn {
             const card = Card.fromCardContentDivElement(this.selectedCard.querySelector('.card-content'));
             this.currentPlayer.hand.removeCard(card);
 
+            // Track the played card and corresponding player
+            this.playedCards.set(card, this.currentPlayer);
+
             this.selectedCard = null;
             this.cardNotPlayed = false;
 
@@ -64,7 +69,7 @@ export class Turn {
     }
 
     nextComputerTurn() {
-        this.setNextPlayerToCurrent()
+        this.setNextPlayerToCurrent();
         this.computerPlayCard();
     }
 
@@ -82,7 +87,7 @@ export class Turn {
 
         // Find the first valid play in the computer player's hand
         const playedCard = this.currentPlayer.hand.cards.find(card => validPlays.includes(card));
-        if (!this.spadesBroken && playedCard.suit == 'Spades') {
+        if (!this.spadesBroken && playedCard.suit === 'Spades') {
             this.spadesBroken = true;
         }
 
@@ -101,25 +106,52 @@ export class Turn {
         const playAreaElement = document.querySelector('.play-area');
         playAreaElement.appendChild(cardElement);
 
+        // Track the played card and corresponding player
+        this.playedCards.set(playedCard, this.currentPlayer);
+
         this.computerCardsPlayed++;
 
         if (this.computerCardsPlayed <= 3) {
             // Pass the turn to the next player
             this.playNextTurn();
 
-            if (this.computerCardsPlayed == 3) {
+            if (this.computerCardsPlayed === 3) {
                 this.computerCardsPlayed = 0;
             }
         }
     }
 
-
     playNextTurn() {
+        if (this.computerCardsPlayed === 3) {
+            // All four players have played a card, compare and determine the winning player
+            const playedCardsArray = Array.from(this.playedCards.keys());
+            const winningCard = compareCardsForTurn(...playedCardsArray);
+            const winningPlayer = this.playedCards.get(winningCard);
+
+            // Update the number of books made by the winning player's team
+            if (winningPlayer.team === 1) {
+                // Update team 1's books
+                const team1BooksElement = document.querySelector('.team1-books');
+                let team1Books = parseInt(team1BooksElement.textContent.split(':')[1].trim());
+                team1Books++;
+                team1BooksElement.textContent = `Our Books: ${team1Books} / Bid: 0`;
+            } else if (winningPlayer.team === 2) {
+                // Update team 2's books
+                const team2BooksElement = document.querySelector('.team2-books');
+                let team2Books = parseInt(team2BooksElement.textContent.split(':')[1].trim());
+                team2Books++;
+                team2BooksElement.textContent = `Their Books: ${team2Books} / Bid: 0`;
+            }
+
+            this.playedCards.clear();
+        }
+
         // Play the card for the current player
         this.setNextPlayerToCurrent();
         this.playCard();
         this.cardNotPlayed = true;
     }
+
 
     setNextPlayerToCurrent() {
         const currentPlayerIndex = this.players.findIndex(player => player.name === this.currentPlayer.name);

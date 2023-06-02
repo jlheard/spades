@@ -13,21 +13,21 @@ export function gameTest() {
     game = new Game();
   });  
 
-  test('Setting the partner should establish the proper partnerships', () => {
+  test('Setting the team should establish the proper teams', () => {
     const you = new Player('You');
     const north = new Player('North');
     const east = new Player('East');
     const west = new Player('West');
 
-    you.setPartner(north);
-    north.setPartner(you);
-    east.setPartner(west);
-    west.setPartner(east);
+    you.setTeam(1);
+    north.setTeam(1);
+    east.setTeam(2);
+    west.setTeam(2);
 
-    assert(you.partner === north, 'You should be partnered with North');
-    assert(north.partner === you, 'North should be partnered with You');
-    assert(east.partner === west, 'East should be partnered with West');
-    assert(west.partner === east, 'West should be partnered with East');
+    assert(you.team === 1, 'You should be on team 1');
+    assert(north.team === 1, 'North should be on team 1');
+    assert(east.team  === 2, 'East should be on team 2');
+    assert(west.team === 2, 'West should be on team 2');
   });
 
   test('Each player should have 13 cards after dealing hands', () => {
