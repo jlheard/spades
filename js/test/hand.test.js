@@ -1,7 +1,7 @@
 // hand.test.js
 
-import { Card, SUITS } from '../card.js';
-import { Hand, RANK_ORDER } from '../hand.js';
+import { Card, RANKS, SUITS } from '../card.js';
+import { Hand } from '../hand.js';
 import { assert, test, beforeEach, setTestFile } from './testUtils.js';
 
 export function handTest() {
@@ -14,7 +14,7 @@ export function handTest() {
     test('Hand - sortCards() sorts the cards with all ranks for each suit', () => {
         // Arrange
         const hand = new Hand();
-        const ranks = RANK_ORDER.slice(); // Copy the array
+        const ranks = RANKS.slice(); // Copy the array
         const expectedSortedCards = [];
 
         // Generate expected sorted cards

@@ -1,7 +1,5 @@
-import { SUITS } from './card.js';
+import { SUITS, RANKS } from './card.js';
 import { LegalPlayRules } from './legalPlayRules.js';
-
-export const RANK_ORDER = ['BigJoker', 'ExtraJoker', 'A', 'K', 'Q', 'J', '10', '9', '8', '7', '6', '5', '4', '3', '2'];
 
 export class Hand {
     constructor() {
@@ -21,7 +19,7 @@ export class Hand {
             if (a.suit !== b.suit) {
                 return SUITS.indexOf(a.suit) - SUITS.indexOf(b.suit);
             } else {
-                return RANK_ORDER.indexOf(a.rank) - RANK_ORDER.indexOf(b.rank);
+                return RANKS.indexOf(a.rank) - RANKS.indexOf(b.rank);
             }
         });
     }

@@ -1,7 +1,8 @@
 // player.js
 
+import { RANKS } from './card.js';
 import { getSuitSymbol } from './deck.js';
-import { Hand, RANK_ORDER } from './hand.js';
+import { Hand } from './hand.js';
 
 export class Player {
     constructor(name, isComputer = false) {
@@ -42,7 +43,7 @@ export class Player {
       const validPlays = Array.from(validPlaysMap.values());
     
       Object.values(cardsBySuit).forEach(cards => {
-        cards.sort((a, b) => RANK_ORDER.indexOf(a.rank) - RANK_ORDER.indexOf(b.rank));
+        cards.sort((a, b) => RANKS.indexOf(a.rank) - RANKS.indexOf(b.rank));
     
         const cardGroup = document.createElement('div');
         cardGroup.classList.add('card-group');
