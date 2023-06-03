@@ -2,6 +2,7 @@
 
 import { Player } from './player.js';
 import { Deck, getSuitSymbol } from './deck.js';
+import { PlayStrategy } from './stratagies/play/playStrategy.js';
 
 export class Game {
     constructor() {
@@ -12,9 +13,15 @@ export class Game {
 
     initializePlayers() {
         const you = new Player('You');
+        
         const north = new Player('North', true);
+        north.setStrategy(new PlayStrategy(north));
+
         const east = new Player('East', true);
+        east.setStrategy(new PlayStrategy(east));
+
         const west = new Player('West', true);
+        west.setStrategy(new PlayStrategy(west));
 
         // Set teams
         you.setTeam(1);

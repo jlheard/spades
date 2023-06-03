@@ -1,6 +1,7 @@
 import { Card } from './card.js';
 import { getSuitSymbol } from './deck.js';
 import { compareCardsForTurn } from './cardComparer.js';
+import { PlayStrategy } from './stratagies/play/playStrategy.js';
 
 export class Turn {
     constructor(players, playerHandElement) {
@@ -80,39 +81,31 @@ export class Turn {
     }
 
     computerPlayCard() {
+        const strategy = new PlayStrategy(this.currentPlayer);
+
         const lastPlayedCardElement = document.querySelector('.play-area .card:last-child .card-content');
         const lastPlayedCardSuit = Card.fromCardContentDivElement(lastPlayedCardElement).suit;
-        const validPlaysMap = this.currentPlayer.hand.getLegalPlaysMap(lastPlayedCardSuit, this.spadesBroken);
-        const validPlays = Array.from(validPlaysMap.values());
 
-        // Find the first valid play in the computer player's hand
-        const playedCard = this.currentPlayer.hand.cards.find(card => validPlays.includes(card));
+        const playedCard = strategy.playCard(lastPlayedCardSuit, this.spadesBroken);
+
         if (!this.spadesBroken && playedCard.suit === 'Spades') {
             this.spadesBroken = true;
         }
 
-        // Remove the played card from the computer player's hand
-        const playedCardIndex = this.currentPlayer.hand.cards.indexOf(playedCard);
-        this.currentPlayer.hand.cards.splice(playedCardIndex, 1);
-
-        // Update the UI by creating a new card element for the played card
         const cardElement = document.createElement('div');
         cardElement.classList.add('card');
         cardElement.classList.add(this.currentPlayer.name.toLowerCase());
         cardElement.classList.add(`suit-${playedCard.suit.toLowerCase()}`);
         cardElement.innerHTML = `<div class="card-content">${playedCard.rank}&nbsp;${getSuitSymbol(playedCard.suit)}</div>`;
 
-        // Add the card element to the play area
         const playAreaElement = document.querySelector('.play-area');
         playAreaElement.appendChild(cardElement);
 
-        // Track the played card and corresponding player
         this.playedCards.set(playedCard, this.currentPlayer);
 
         this.computerCardsPlayed++;
 
         if (this.computerCardsPlayed <= 3) {
-            // Pass the turn to the next player
             this.playNextTurn();
 
             if (this.computerCardsPlayed === 3) {
