@@ -16,10 +16,15 @@ export function cardComparerTest() {
     const card2 = new Card('Q', 'Hearts');
     const card3 = new Card('A', 'Hearts');
     const card4 = new Card('J', 'Hearts');
-    const playedCards = [leadCard, card2, card3, card4];
+    const playerForPlayedCardMap = new Map([
+      [leadCard, 'Player 1'],
+      [card2, 'Player 2'],
+      [card3, 'Player 3'],
+      [card4, 'Player 4'],
+    ]);
 
     assert(
-      compareCardsForTurn(playedCards) === card3,
+      compareCardsForTurn(playerForPlayedCardMap) === card3,
       'Expected card3 to win'
     );
   });
@@ -30,10 +35,15 @@ export function cardComparerTest() {
     const card2 = new Card('A', 'Hearts');
     const card3 = new Card('Q', 'Diamonds');
     const card4 = new Card('J', 'Clubs');
-    const playedCards = [leadCard, card2, card3, card4];
+    const playerForPlayedCardMap = new Map([
+      [leadCard, 'Player 1'],
+      [card2, 'Player 2'],
+      [card3, 'Player 3'],
+      [card4, 'Player 4'],
+    ]);
 
     assert(
-      compareCardsForTurn(playedCards) === leadCard,
+      compareCardsForTurn(playerForPlayedCardMap) === leadCard,
       'Expected lead card to win as no other spades present'
     );
   });
@@ -44,10 +54,15 @@ export function cardComparerTest() {
     const card2 = new Card('A', 'Spades');
     const card3 = new Card('Q', 'Diamonds');
     const card4 = new Card('J', 'Clubs');
-    const playedCards = [leadCard, card2, card3, card4];
+    const playerForPlayedCardMap = new Map([
+      [leadCard, 'Player 1'],
+      [card2, 'Player 2'],
+      [card3, 'Player 3'],
+      [card4, 'Player 4'],
+    ]);
 
     assert(
-      compareCardsForTurn(playedCards) === card2,
+      compareCardsForTurn(playerForPlayedCardMap) === card2,
       'Expected card2 to win as other spades present'
     );
   });
@@ -58,10 +73,15 @@ export function cardComparerTest() {
     const card2 = new Card('A', 'Spades');
     const card3 = new Card('Q', 'Diamonds');
     const card4 = new Card('J', 'Clubs');
-    const playedCards = [leadCard, card2, card3, card4];
+    const playerForPlayedCardMap = new Map([
+      [leadCard, 'Player 1'],
+      [card2, 'Player 2'],
+      [card3, 'Player 3'],
+      [card4, 'Player 4'],
+    ]);
 
     assert(
-      compareCardsForTurn(playedCards) === card2,
+      compareCardsForTurn(playerForPlayedCardMap) === card2,
       'Expected card2 to win as other spades present'
     );
   });
@@ -72,11 +92,35 @@ export function cardComparerTest() {
     const card2 = new Card('A', 'Diamonds');
     const card3 = new Card('Q', 'Clubs');
     const card4 = new Card('J', 'Clubs');
-    const playedCards = [leadCard, card2, card3, card4];
+    const playerForPlayedCardMap = new Map([
+      [leadCard, 'Player 1'],
+      [card2, 'Player 2'],
+      [card3, 'Player 3'],
+      [card4, 'Player 4'],
+    ]);
 
     assert(
-      compareCardsForTurn(playedCards) === leadCard,
+      compareCardsForTurn(playerForPlayedCardMap) === leadCard,
       'Expected lead card to win as no other spades present'
     );
   });
+
+  // Test case: Spades test
+  test('Correct card should win when all spades present', () => {
+    const leadCard = new Card('K', 'Spades');
+    const card2 = new Card('A', 'Spades');
+    const card3 = new Card('Q', 'Spades');
+    const card4 = new Card('J', 'Spades');
+    const playerForPlayedCardMap = new Map([
+      [leadCard, 'Player 1'],
+      [card2, 'Player 2'],
+      [card3, 'Player 3'],
+      [card4, 'Player 4'],
+    ]);
+
+    assert(
+      compareCardsForTurn(playerForPlayedCardMap) === card2,
+      'Expected lead card to win as no other spades present'
+    );
+  });  
 }

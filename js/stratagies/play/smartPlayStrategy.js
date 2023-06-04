@@ -5,8 +5,8 @@ export class SmartPlayStrategy extends PlayStrategy {
     super(player);
   }
 
-  chooseCardToPlay(validPlays, playedCards, leadingCard) {
-    const partnerCard = this.getPartnerCard(playedCards);
+  chooseCardToPlay(validPlays, playerForPlayedCardMap, leadingCard) {
+    const partnerCard = this.getPartnerCard(playerForPlayedCardMap);
 
     // Check if partner has already won a book
     if (partnerCard && partnerCard.player.hasWonBook) {
@@ -14,12 +14,12 @@ export class SmartPlayStrategy extends PlayStrategy {
     }
 
     // Check if partner has cut a player and will win the turn
-    if (partnerCard && this.partnerHasCutAndWillWin(partnerCard, playedCards)) {
+    if (partnerCard && this.partnerHasCutAndWillWin(partnerCard, playerForPlayedCardMap)) {
       return this.throwLowestCardInCutSuit(validPlays, partnerCard);
     }
 
     // Check if partner leads with the only opponent left to play
-    if (partnerCard && this.partnerLeadsWithLastOpponent(partnerCard, playedCards)) {
+    if (partnerCard && this.partnerLeadsWithLastOpponent(partnerCard, playerForPlayedCardMap)) {
       return this.playHighestCardInLeadSuit(validPlays, leadingCard);
     }
 

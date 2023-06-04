@@ -5,13 +5,13 @@ export class PlayStrategy {
         this.player = player;
     }
 
-    playCard(playedCards, leadingCard, spadesBroken) {
+    playCard(playerForPlayedCardMap, leadingCard, spadesBroken) {
         const leadingSuit = leadingCard ? leadingCard.suit : null;
         const validPlaysMap = this.player.hand.getLegalPlaysMap(leadingSuit, spadesBroken);
         const validPlays = Array.from(validPlaysMap.values());
 
         // Choose a card to play based on the computer player's strategy
-        const cardToPlay = this.chooseCardToPlay(validPlays, playedCards, leadingCard);
+        const cardToPlay = this.chooseCardToPlay(validPlays, playerForPlayedCardMap, leadingCard);
 
         // Remove the played card from the computer player's hand
         this.player.hand.removeCard(cardToPlay);
@@ -19,7 +19,7 @@ export class PlayStrategy {
         return cardToPlay;
     }
 
-    chooseCardToPlay(validPlays, playedCards, leadingCard) {
+    chooseCardToPlay(validPlays, playerForPlayedCardMap, leadingCard) {
         // Implement your smart player strategy here
         // Use the information of played cards and the leading card to make a strategic decision
         // Consider factors such as card valuation, suit management, trump management, trick-taking estimation, and risk assessment
@@ -40,10 +40,10 @@ export class PlayStrategy {
         return chosenCard;
     }
 
-    partnerHasCutAndWillWin(partnerCard, playedCards) {
+    partnerHasCutAndWillWin(partnerCard, playerForPlayedCardMap) {
         // Check if partner has cut a player (played a spade) and will win the turn
-        const lastPlayedCard = Array.from(playedCards.values()).pop();
-        return partnerCard.suit === 'Spades' && partnerCard !== lastPlayedCard && partnerCard === compareCardsForTurn(Array.from(playedCards.values()));
+        const lastPlayedCard = Array.from(playerForPlayedCardMap.keys()).pop();
+        return partnerCard.suit === 'Spades' && partnerCard !== lastPlayedCard && partnerCard === compareCardsForTurn(playerForPlayedCardMap);
       }      
 
     throwLowestCardInCutSuit(validPlays, partnerCard) {
@@ -63,11 +63,10 @@ export class PlayStrategy {
         return lowestNonCutCard;
     }
 
-    partnerLeadsWithLastOpponent(partnerCard, playedCards) {
+    partnerLeadsWithLastOpponent(partnerCard, playerForPlayedCardMap) {
         // Check if partner leads with the only opponent left to play
-        if (playedCards.length === 1 && partnerCard) {
-            const lastOpponentCard = Array.from(playedCards.values())[0];
-            const winningCard = compareCardsForTurn([partnerCard, lastOpponentCard]);
+        if (partnerCard) {
+            const winningCard = compareCardsForTurn(playerForPlayedCardMap);
             return winningCard === partnerCard; // Partner leads if partnerCard is the winning card
         }
 
@@ -93,20 +92,20 @@ export class PlayStrategy {
         return chosenCard;
     }
 
-    getPartnerCard(playedCards) {
-        const team1Player = this.getTeamPlayer(playedCards, 1);
-        const team2Player = this.getTeamPlayer(playedCards, 2);
+    getPartnerCard(playerForPlayedCardMap) {
+        const team1Player = this.getTeamPlayer(playerForPlayedCardMap, 1);
+        const team2Player = this.getTeamPlayer(playerForPlayedCardMap, 2);
 
         if (team1Player && team2Player) {
-            return playedCards.get(team2Player);
+            return playerForPlayedCardMap.get(team2Player);
         }
 
         return null;
     }
 
 
-    getTeamPlayer(playedCards, team) {
-        for (const [player, card] of playedCards.entries()) {
+    getTeamPlayer(playerForPlayedCardMap, team) {
+        for (const [player, card] of playerForPlayedCardMap.entries()) {
             if (player.team === team) {
                 return player; // Return the player object
             }
@@ -115,15 +114,17 @@ export class PlayStrategy {
     }
 
 
-    getWinningPlayer(playedCards) {
-        let winningCard = compareCardsForTurn(Array.from(playedCards.values()));
-        for (const [player, card] of playedCards.entries()) {
-            if (card === winningCard) {
-                return player;
-            }
+    getWinningPlayer(playerForPlayedCardMap) {
+        const winningCard = compareCardsForTurn(playerForPlayedCardMap);
+      
+        for (const [card, player] of playerForPlayedCardMap.entries()) {
+          if (card === winningCard) {
+            return player;
+          }
         }
+      
         return null; // Return null if no winning player is found
-    }
+      }
 
 
 }

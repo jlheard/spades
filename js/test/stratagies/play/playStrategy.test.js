@@ -19,12 +19,12 @@ export function playStrategyTest() {
 
         const strategy = new PlayStrategy(player);
 
-        const playedCards = []; // Array to store the played cards
+        const playerForPlayedCardMap = []; // Array to store the played cards
         const leadingCard = null; // Set the leading card to null for this test
         const spadesBroken = true; // Set spadesBroken to true for this test
 
         // Call the playCard method
-        const playedCard = strategy.playCard(playedCards, leadingCard, spadesBroken);
+        const playedCard = strategy.playCard(playerForPlayedCardMap, leadingCard, spadesBroken);
 
         // Assert that a valid card was played
         assert(playedCard !== null, 'A valid card should be played');
@@ -56,10 +56,10 @@ export function playStrategyTest() {
     test('partnerHasCutAndWillWin', () => {
         let partner = new Player('Partner');
         partner.setTeam(1);
-        
+
         let smartPlayer = new Player('SmartPlayer')
         partner.setTeam(1);
-        
+
         // Create an instance of PlayStrategy
         const playStrategy = new PlayStrategy(smartPlayer);
 
@@ -67,16 +67,16 @@ export function playStrategyTest() {
         opponent1.setTeam(2);
 
         let opponent2 = new Player('Opponent 2')
-        opponent2.setTeam(2);        
+        opponent2.setTeam(2);
 
         const partnerCard = new Card('A', 'Spades');
-        const playedCards = new Map([
-            [opponent1, new Card('K', 'Hearts')],
-            [partner, partnerCard],
-            [opponent2, new Card('3', 'Hearts')],
+        const playerForPlayedCardMap = new Map([
+            [new Card('K', 'Hearts'), opponent1],
+            [partnerCard, partner],
+            [new Card('3', 'Hearts'), opponent2],
         ]);
 
-        const result = playStrategy.partnerHasCutAndWillWin(partnerCard, playedCards);
+        const result = playStrategy.partnerHasCutAndWillWin(partnerCard, playerForPlayedCardMap);
 
         assert(result === true, 'Expected partner to have cut and will win');
     });
@@ -108,10 +108,12 @@ export function playStrategyTest() {
         // Create an instance of PlayStrategy
         const playStrategy = new PlayStrategy(null);
 
-        const partnerCard = new Card('A', 'Hearts');
-        const playedCards = [new Card('J', 'Diamonds')];
+        const partnerCard = new Card('A', 'Diamonds');
+        const playerForPlayedCardMap = new Map();
+        playerForPlayedCardMap.set(new Card('J', 'Diamonds'), new Player('1'));
+        playerForPlayedCardMap.set(partnerCard, new Player('2'))
 
-        const result = playStrategy.partnerLeadsWithLastOpponent(partnerCard, playedCards);
+        const result = playStrategy.partnerLeadsWithLastOpponent(partnerCard, playerForPlayedCardMap);
 
         assert(result === true, 'Expected partner to lead with the last opponent');
     });
@@ -167,12 +169,12 @@ export function playStrategyTest() {
         const player3 = new Player('Player 3');
         player3.setTeam(1);
 
-        const playedCards = new Map();
-        playedCards.set(player1, new Card('2', 'Spades'));
-        playedCards.set(player2, new Card('5', 'Hearts'));
-        playedCards.set(player3, new Card('3', 'Diamonds'));
+        const playerForPlayedCardMap = new Map();
+        playerForPlayedCardMap.set(player1, new Card('2', 'Spades'));
+        playerForPlayedCardMap.set(player2, new Card('5', 'Hearts'));
+        playerForPlayedCardMap.set(player3, new Card('3', 'Diamonds'));
 
-        const partnerCard = playStrategy.getPartnerCard(playedCards);
+        const partnerCard = playStrategy.getPartnerCard(playerForPlayedCardMap);
 
         assert(
             partnerCard.rank === '5' && partnerCard.suit === 'Hearts',
@@ -193,14 +195,14 @@ export function playStrategyTest() {
         const player3 = new Player('Player 3');
         player3.setTeam(1);
 
-        const playedCards = new Map([
+        const playerForPlayedCardMap = new Map([
             [player1, new Card('2', 'Spades')],
             [player2, new Card('5', 'Hearts')],
             [player3, new Card('3', 'Diamonds')],
         ]);
 
         let team = 1;
-        const team1Player = playStrategy.getTeamPlayer(playedCards, team);
+        const team1Player = playStrategy.getTeamPlayer(playerForPlayedCardMap, team);
 
         assert(
             team1Player.team === team,
@@ -208,7 +210,7 @@ export function playStrategyTest() {
         );
 
         team = 2;
-        const team2Player = playStrategy.getTeamPlayer(playedCards, team);
+        const team2Player = playStrategy.getTeamPlayer(playerForPlayedCardMap, team);
 
         assert(
             team2Player.team === team,
@@ -232,18 +234,18 @@ export function playStrategyTest() {
         const card3 = new Card('K', 'Spades');
         const card4 = new Card('J', 'Spades');
 
-        const playedCards = new Map([
-            [player1, card1],
-            [player2, card2],
-            [player3, card3],
-            [player4, card4],
+        const playerForPlayedCardMap = new Map([
+            [card1, player1],
+            [card2, player2],
+            [card3, player3],
+            [card4, player4],
         ]);
 
-        const winningCard = compareCardsForTurn(Array.from(playedCards.values()));
-        const expectedWinningPlayer = Array.from(playedCards.keys()).find(player => playedCards.get(player) === winningCard);
+        const winningCard = compareCardsForTurn(playerForPlayedCardMap);
+        const expectedWinningPlayer = playerForPlayedCardMap.get(winningCard);
 
         assert(
-            strategy.getWinningPlayer(playedCards) === expectedWinningPlayer,
+            strategy.getWinningPlayer(playerForPlayedCardMap) === expectedWinningPlayer,
             'Expected winning player to be determined correctly'
         );
     });

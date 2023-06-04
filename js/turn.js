@@ -13,7 +13,7 @@ export class Turn {
         this.cardNotPlayed = true;
         this.computerCardsPlayed = 0;
         this.spadesBroken = false;
-        this.playedCards = new Map(); // Map to track played cards and corresponding players
+        this.playerForPlayedCardMap = new Map(); // Map to track played cards and corresponding players
 
         this.playerHandElement.addEventListener('click', this.handleCardClick.bind(this));
 
@@ -59,7 +59,7 @@ export class Turn {
             this.currentPlayer.hand.removeCard(card);
 
             // Track the played card and corresponding player
-            this.playedCards.set(card, this.currentPlayer);
+            this.playerForPlayedCardMap.set(card, this.currentPlayer);
 
             this.selectedCard = null;
             this.cardNotPlayed = false;
@@ -85,7 +85,7 @@ export class Turn {
 
         const lastPlayedCardElement = document.querySelector('.play-area .card:last-child .card-content');
         const lastPlayedCard = Card.fromCardContentDivElement(lastPlayedCardElement);
-        const playedCard = strategy.playCard(this.playedCards, lastPlayedCard, this.spadesBroken);
+        const playedCard = strategy.playCard(this.playerForPlayedCardMap, lastPlayedCard, this.spadesBroken);
 
         if (!this.spadesBroken && playedCard.suit === 'Spades') {
             this.spadesBroken = true;
@@ -100,7 +100,7 @@ export class Turn {
         const playAreaElement = document.querySelector('.play-area');
         playAreaElement.appendChild(cardElement);
 
-        this.playedCards.set(playedCard, this.currentPlayer);
+        this.playerForPlayedCardMap.set(playedCard, this.currentPlayer);
 
         this.computerCardsPlayed++;
 
@@ -116,9 +116,8 @@ export class Turn {
     playNextTurn() {
         if (this.computerCardsPlayed === 3) {
             // All four players have played a card, compare and determine the winning player
-            const playedCardsArray = Array.from(this.playedCards.keys());
-            const winningCard = compareCardsForTurn(...playedCardsArray);
-            const winningPlayer = this.playedCards.get(winningCard);
+            const winningCard = compareCardsForTurn(this.playerForPlayedCardMap);
+            const winningPlayer = this.playerForPlayedCardMap.get(winningCard);
 
             // Update the number of books made by the winning player's team
             if (winningPlayer.team === 1) {
@@ -135,7 +134,7 @@ export class Turn {
                 team2BooksElement.textContent = `Their Books: ${team2Books} / Bid: 0`;
             }
 
-            this.playedCards.clear();
+            this.playerForPlayedCardMap.clear();
         }
 
         // Play the card for the current player

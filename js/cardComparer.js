@@ -1,8 +1,10 @@
 import { RANKS } from './card.js';
 
-export function compareCardsForTurn(playedCards) {
-  const leadCard = playedCards[0];
-  const otherCards = playedCards.slice(1);
+export function compareCardsForTurn(playerForPlayedCardMap) {
+  const cardsArray = Array.from(playerForPlayedCardMap.keys()); // Convert Map values to an array of cards
+
+  const leadCard = cardsArray[0];
+  const otherCards = cardsArray.slice(1);
 
   // Check if the lead card is a spade
   if (leadCard.suit === 'Spades') {
