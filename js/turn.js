@@ -84,9 +84,8 @@ export class Turn {
         const strategy = new PlayStrategy(this.currentPlayer);
 
         const lastPlayedCardElement = document.querySelector('.play-area .card:last-child .card-content');
-        const lastPlayedCardSuit = Card.fromCardContentDivElement(lastPlayedCardElement).suit;
-
-        const playedCard = strategy.playCard(lastPlayedCardSuit, this.spadesBroken);
+        const lastPlayedCard = Card.fromCardContentDivElement(lastPlayedCardElement);
+        const playedCard = strategy.playCard(this.playedCards, lastPlayedCard, this.spadesBroken);
 
         if (!this.spadesBroken && playedCard.suit === 'Spades') {
             this.spadesBroken = true;

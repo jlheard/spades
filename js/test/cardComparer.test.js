@@ -16,9 +16,10 @@ export function cardComparerTest() {
     const card2 = new Card('Q', 'Hearts');
     const card3 = new Card('A', 'Hearts');
     const card4 = new Card('J', 'Hearts');
+    const playedCards = [leadCard, card2, card3, card4];
 
     assert(
-      compareCardsForTurn(leadCard, card2, card3, card4) === card3,
+      compareCardsForTurn(playedCards) === card3,
       'Expected card3 to win'
     );
   });
@@ -29,9 +30,10 @@ export function cardComparerTest() {
     const card2 = new Card('A', 'Hearts');
     const card3 = new Card('Q', 'Diamonds');
     const card4 = new Card('J', 'Clubs');
+    const playedCards = [leadCard, card2, card3, card4];
 
     assert(
-      compareCardsForTurn(leadCard, card2, card3, card4) === leadCard,
+      compareCardsForTurn(playedCards) === leadCard,
       'Expected lead card to win as no other spades present'
     );
   });
@@ -42,9 +44,10 @@ export function cardComparerTest() {
     const card2 = new Card('A', 'Spades');
     const card3 = new Card('Q', 'Diamonds');
     const card4 = new Card('J', 'Clubs');
+    const playedCards = [leadCard, card2, card3, card4];
 
     assert(
-      compareCardsForTurn(leadCard, card2, card3, card4) === card2,
+      compareCardsForTurn(playedCards) === card2,
       'Expected card2 to win as other spades present'
     );
   });
@@ -55,9 +58,10 @@ export function cardComparerTest() {
     const card2 = new Card('A', 'Spades');
     const card3 = new Card('Q', 'Diamonds');
     const card4 = new Card('J', 'Clubs');
+    const playedCards = [leadCard, card2, card3, card4];
 
     assert(
-      compareCardsForTurn(leadCard, card2, card3, card4) === card2,
+      compareCardsForTurn(playedCards) === card2,
       'Expected card2 to win as other spades present'
     );
   });
@@ -68,9 +72,10 @@ export function cardComparerTest() {
     const card2 = new Card('A', 'Diamonds');
     const card3 = new Card('Q', 'Clubs');
     const card4 = new Card('J', 'Clubs');
+    const playedCards = [leadCard, card2, card3, card4];
 
     assert(
-      compareCardsForTurn(leadCard, card2, card3, card4) === leadCard,
+      compareCardsForTurn(playedCards) === leadCard,
       'Expected lead card to win as no other spades present'
     );
   });

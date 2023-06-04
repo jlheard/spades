@@ -1,12 +1,13 @@
 import { RANKS } from './card.js';
 
-export function compareCardsForTurn(leadCard, card2, card3, card4) {
-  const cards = [leadCard, card2, card3, card4];
+export function compareCardsForTurn(playedCards) {
+  const leadCard = playedCards[0];
+  const otherCards = playedCards.slice(1);
 
   // Check if the lead card is a spade
   if (leadCard.suit === 'Spades') {
     // Check if any other card is also a spade
-    const otherSpades = cards.slice(1).filter(card => card.suit === 'Spades');
+    const otherSpades = otherCards.filter(card => card.suit === 'Spades');
 
     if (otherSpades.length === 0) {
       return leadCard; // Lead card wins as no other spades present
@@ -19,14 +20,14 @@ export function compareCardsForTurn(leadCard, card2, card3, card4) {
     return winningSpade;
   } else {
     // Check if any other card is a spade
-    const hasSpades = cards.slice(1).some(card => card.suit === 'Spades');
+    const hasSpades = otherCards.some(card => card.suit === 'Spades');
 
     if (hasSpades) {
-      return cards.find(card => card.suit === 'Spades'); // Other spades present, find the first spade card as the winner
+      return otherCards.find(card => card.suit === 'Spades'); // Other spades present, find the first spade card as the winner
     } else {
       let winningCard = leadCard;
 
-      for (const card of cards.slice(1)) {
+      for (const card of otherCards) {
         if (card.suit === leadCard.suit && RANKS.indexOf(card.rank) < RANKS.indexOf(winningCard.rank)) {
           winningCard = card;
         }
