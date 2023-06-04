@@ -9,6 +9,8 @@ export class Game {
         this.players = [];
         this.deck = new Deck();
         this.initializePlayers();
+        this.scoreThreshold = 500;
+        this.currentScore = 0;        
     }
 
     initializePlayers() {

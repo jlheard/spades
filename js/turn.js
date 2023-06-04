@@ -11,7 +11,7 @@ export class Turn {
         this.currentPlayer = this.players[this.currentPlayerIndex];
         this.selectedCard = null;
         this.cardNotPlayed = true;
-        this.computerCardsPlayed = 0;
+        this.cardsPlayed = 0;
         this.spadesBroken = false;
         this.playerForPlayedCardMap = new Map(); // Map to track played cards and corresponding players
 
@@ -66,6 +66,8 @@ export class Turn {
 
             // Update the hand element for the current player
             this.currentPlayer.updateHandElement(this.spadesBroken);
+
+            this.cardsPlayed++; // Increment cardsPlayed
         }
     }
 
@@ -77,7 +79,7 @@ export class Turn {
     playCard() {
         if (this.currentPlayer.isComputer) {
             this.computerPlayCard();
-        }
+        } 
     }
 
     computerPlayCard() {
@@ -102,47 +104,43 @@ export class Turn {
 
         this.playerForPlayedCardMap.set(playedCard, this.currentPlayer);
 
-        this.computerCardsPlayed++;
+        this.cardsPlayed++;
 
-        if (this.computerCardsPlayed <= 3) {
-            this.playNextTurn();
-
-            if (this.computerCardsPlayed === 3) {
-                this.computerCardsPlayed = 0;
-            }
-        }
+        this.playNextTurn();        
     }
 
     playNextTurn() {
-        if (this.computerCardsPlayed === 3) {
-            // All four players have played a card, compare and determine the winning player
-            const winningCard = compareCardsForTurn(this.playerForPlayedCardMap);
-            const winningPlayer = this.playerForPlayedCardMap.get(winningCard);
-
-            // Update the number of books made by the winning player's team
-            if (winningPlayer.team === 1) {
-                // Update team 1's books
-                const team1BooksElement = document.querySelector('.team1-books');
-                let team1Books = parseInt(team1BooksElement.textContent.split(':')[1].trim());
-                team1Books++;
-                team1BooksElement.textContent = `Our Books: ${team1Books} / Bid: 0`;
-            } else if (winningPlayer.team === 2) {
-                // Update team 2's books
-                const team2BooksElement = document.querySelector('.team2-books');
-                let team2Books = parseInt(team2BooksElement.textContent.split(':')[1].trim());
-                team2Books++;
-                team2BooksElement.textContent = `Their Books: ${team2Books} / Bid: 0`;
-            }
-
-            this.playerForPlayedCardMap.clear();
+        if (this.cardsPlayed === this.players.length) {
+          // All players have played a card, compare and determine the winning player
+          const winningCard = compareCardsForTurn(this.playerForPlayedCardMap);
+          const winningPlayer = this.playerForPlayedCardMap.get(winningCard);
+      
+          // Update the number of books made by the winning player's team
+          if (winningPlayer.team === 1) {
+            // Update team 1's books
+            const team1BooksElement = document.querySelector('.team1-books');
+            let team1Books = parseInt(team1BooksElement.textContent.split(':')[1].trim());
+            team1Books++;
+            team1BooksElement.textContent = `Our Books: ${team1Books} / Bid: 0`;
+          } else if (winningPlayer.team === 2) {
+            // Update team 2's books
+            const team2BooksElement = document.querySelector('.team2-books');
+            let team2Books = parseInt(team2BooksElement.textContent.split(':')[1].trim());
+            team2Books++;
+            team2BooksElement.textContent = `Their Books: ${team2Books} / Bid: 0`;
+          }
+      
+          this.playerForPlayedCardMap.clear();
+          this.cardsPlayed = 0;
         }
 
-        // Play the card for the current player
         this.setNextPlayerToCurrent();
+      
+        // Play the card for the current player
         this.playCard();
-        this.cardNotPlayed = true;
-    }
-
+        this.cardNotPlayed = true;        
+      }
+      
 
     setNextPlayerToCurrent() {
         const currentPlayerIndex = this.players.findIndex(player => player.name === this.currentPlayer.name);
