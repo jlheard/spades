@@ -5,6 +5,29 @@
   animation: pulse 1.5s ease-in-out;
   box-shadow: 0 0 15px 5px gold;
   z-index: 10;
+  position: relative; /* Ensure positioning context */
+}
+
+.winning-card-animation::after {
+  content: "WINNER";
+  position: absolute;
+  top: -20px;
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: gold;
+  color: black;
+  padding: 2px 8px;
+  border-radius: 4px;
+  font-size: 12px;
+  font-weight: bold;
+}
+
+.winning-card-animation .card-content {
+  /* Ensure card content remains visible */
+  font-weight: bold;
+  font-size: 1.2em;
+  z-index: 11;
+  position: relative;
 }
 
 @keyframes pulse {

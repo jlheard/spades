@@ -2,49 +2,127 @@
 
 ## Current Focus
 
-The immediate goal is to ensure the **Spades game rules function correctly** during actual gameplay — not just in tests. While many unit tests are passing, the in-game experience reveals multiple issues that need to be addressed. 
+The immediate goal is to address specific gameplay issues identified during testing. We've successfully migrated to QUnit for testing, but have discovered two critical issues that need to be fixed:
 
-This phase focuses on bringing the rules and gameplay behavior in line with expectations as described in code comments and prior discussions.
+1. **Rule Enforcement Bug**: Players cannot play spades when they don't have the leading suit (clubs), which contradicts the game rules.
+2. **UI/Animation Issue**: The winning card animation works, but the value of the card isn't displayed properly.
 
-### Problems Observed During Gameplay
+We will prioritize fixing the rule enforcement issue first, followed by the UI/animation improvements.
 
-- **Cards disappear too quickly** after being played, making it hard to see what was just played.
-- **Human player can make illegal plays**, even when the rules should prevent them.
-- **Rules enforcement** does not match what is commented or expected.
-- **Inappropriate plays are allowed** — for example, not following suit when required, or leading with spades before they're broken.
+### Specific Issues Identified
 
-## Next Steps
+1. **Rule Enforcement Issue**:
+   - When East player plays a King of Clubs
+   - Human player has no Clubs in their hand
+   - Spades are incorrectly grayed out (invalid play) when they should be valid options
+   - According to game rules: "If a player has no cards in the suit led, they may play any card, including jokers and spades"
 
-1. **Write valid integration tests** that simulate actual in-game card sequences and interactions to catch rule-breaking behaviors that unit tests may miss.
-2. **Fix the rules engine** so that it behaves as expected during real play — particularly around card validation and turn progression.
-   - The file `docs/gameRules.md` contains the canonical list of gameplay rules to be enforced during development.
-3. **Improve playability**:
-   - Visually show which cards were just played before they disappear.
-   - Implement timing or transitions to give players feedback.
-   - Provide better feedback or blocking for invalid plays.
-4. **Enforce correct rules for human player moves**, particularly:
-   - Cannot play out of turn
-   - Must follow suit if possible
-   - Cannot lead with Spades unless broken
+2. **UI/Animation Issue**:
+   - When East player wins a book
+   - The winning animation (gold glow and pulse) works correctly
+   - But the card value doesn't display properly during the animation
 
-## Additional Context
+## Implementation Plan
 
-A set of valid rules was provided earlier in this project context. These rules are important for enforcing proper Spades gameplay and may need to be:
-- Added to the rules engine (possibly `rules.js`)
-- Documented in a permanent shared config or reference file (e.g., `ruleset.md` or `gameRules.json`)
-- Referenced by both the logic engine and UI feedback system
+### Phase 1: Rule Enforcement Fix (Priority)
 
-## Technical Stack
+#### 1. Diagnostic Testing (1-2 days)
+- Create `js/test/qunit/ruleEnforcement.test.js` with specific test cases:
+  - Test playing spades when player has no cards of the leading suit
+  - Test playing other suits when player has no cards of the leading suit
+  - Test the UI state (valid/invalid classes) for these scenarios
+- Add logging to key functions to track values during gameplay:
+  - `LegalPlayRules.isCardLegalToPlay()`
+  - `Hand.getLegalPlaysMap()`
+  - `Player.populateHandElement()`
 
-- **Frontend:** HTML5, JavaScript
-- **Tests:** Custom framework in `js/test/`
-- **Game Logic:** Spread across multiple modules (Cards, Player, Turn Manager, Rules, etc.)
+#### 2. Fix Implementation (2-3 days)
+- Fix the rule enforcement logic:
+  - Ensure `handDoesNotHaveLeadingSuit` is correctly determined
+  - Verify the logic in `LegalPlayRules.isCardLegalToPlay()` for playing spades
+  - Check how `validPlays` are determined in `Player.populateHandElement()`
+- Implement a more robust validation system:
+  - Create a `ValidationResult` class with reason codes and messages
+  - Update `LegalPlayRules` to return these detailed results
+  - Ensure UI properly reflects these validation results
 
-## Cline Role
+#### 3. Verification (1 day)
+- Create a specific test HTML file that focuses on this scenario
+- Implement a simplified game setup that consistently reproduces the issue
+- Verify the fix works in both test and actual gameplay
 
-Cline is expected to:
-- Identify mismatches between tests and gameplay
-- Help fix rule enforcement bugs
-- Guide integration test development
-- Propose UI changes to improve play feedback and experience
-- Eventually support multiplayer upgrades (future phase)
+### Phase 2: UI/UX Improvements
+
+#### 1. Card Animation Diagnostics (1 day)
+- Create `js/test/qunit/cardAnimation.test.js` with test cases for:
+  - Card content visibility during animation
+  - Animation highlighting for the winning card
+  - Animation behavior for all player positions
+
+#### 2. Animation Improvements (2-3 days)
+- Enhance the winning card animation:
+  - Ensure card content (rank and suit) remains visible
+  - Add a "Winner" label or icon to the winning card
+  - Improve the visual distinction of the winning card
+- Implement a card value display enhancement:
+  - Add a larger, centered display of the winning card value
+  - Ensure consistent rendering across different card ranks and suits
+
+#### 3. General UI Improvements (2 days)
+- Enhance error messaging and tooltips
+- Improve card visibility and contrast
+- Add visual cues for the current state of play
+
+## Technical Approach
+
+### Rule Enforcement Fix
+
+The core issue appears to be in how legal plays are determined. We'll focus on:
+
+1. **Debugging the Legal Play Logic**:
+   - Verify that `handDoesNotHaveLeadingSuit` is correctly calculated
+   - Ensure the condition for playing spades when not having the leading suit is working
+   - Check that the UI correctly reflects the legal plays
+
+2. **Test-Driven Development**:
+   - Create QUnit tests that specifically test the edge case
+   - Use these tests to verify the fix works correctly
+   - Add integration tests that simulate the full gameplay scenario
+
+3. **Code Improvements**:
+   - Enhance error handling and logging
+   - Improve the validation logic to be more robust
+   - Add comments explaining the rule enforcement logic
+
+### UI/Animation Improvements
+
+For the animation issues, we'll focus on:
+
+1. **CSS Enhancements**:
+   - Ensure card content remains visible during animations
+   - Add better visual indicators for the winning card
+   - Improve the animation timing and effects
+
+2. **DOM Structure Improvements**:
+   - Ensure consistent card element structure
+   - Add specific classes for animation states
+   - Improve the z-index and positioning of animated elements
+
+## Success Criteria
+
+1. **Rule Enforcement**:
+   - All tests pass, including the new edge case tests
+   - In actual gameplay, players can play spades when they don't have the leading suit
+   - The UI correctly shows which cards are valid plays
+
+2. **UI/Animation**:
+   - Card values are clearly visible during animations
+   - The winning card is prominently highlighted
+   - Animations provide clear feedback about game state
+
+## Next Steps After Completion
+
+Once these issues are fixed, we'll focus on:
+1. Migrating the remaining tests to QUnit
+2. Implementing additional gameplay features
+3. Improving overall game performance and user experience
