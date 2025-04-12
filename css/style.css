@@ -1,4 +1,42 @@
 /* CSS styles for the game layout */
+
+/* Card animations and transitions */
+.winning-card-animation {
+  animation: pulse 1.5s ease-in-out;
+  box-shadow: 0 0 15px 5px gold;
+  z-index: 10;
+}
+
+@keyframes pulse {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.1); }
+  100% { transform: scale(1); }
+}
+
+.fade-out {
+  animation: fadeOut 1s forwards;
+}
+
+@keyframes fadeOut {
+  from { opacity: 1; }
+  to { opacity: 0; }
+}
+
+/* Error tooltip for invalid card plays */
+.error-tooltip {
+  position: absolute;
+  bottom: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: rgba(255, 0, 0, 0.8);
+  color: white;
+  padding: 5px 10px;
+  border-radius: 5px;
+  font-size: 12px;
+  white-space: nowrap;
+  z-index: 100;
+}
+
 body {
   font-family: Arial, sans-serif;
   text-align: center;
@@ -73,6 +111,13 @@ body {
 
 .card.valid-play {
   background-color: white; /* Background color for valid plays */
+  cursor: pointer;
+}
+
+.card.invalid-play {
+  background-color: #f8d7da; /* Light red background for invalid plays */
+  opacity: 0.7;
+  cursor: not-allowed;
 }
 
 /* Play area styles */

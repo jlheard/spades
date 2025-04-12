@@ -22,12 +22,25 @@ This document provides a summary of the current progress, goals, and future step
 
 ### Testing and Automation
 
-- **Custom Testing Framework**:
-  - The testing framework has been set up with unit and integration tests to validate the game's rules and logic. 
-  - Basic tests for card comparison, AI decision-making, and UI flow are in place, but more comprehensive integration tests are needed to fully cover the game’s various scenarios.
+- **QUnit Testing Framework**:
+  - Successfully migrated from the custom testing framework to QUnit for more robust testing capabilities.
+  - Created comprehensive documentation for the migration process in `/docs/test-migration-guide.md`.
+  - Added an Architecture Decision Record (ADR) in `/docs/adr/001-migration-to-qunit.md` to document the decision and implementation plan.
+  - Implemented sample QUnit tests for both unit testing (`js/test/qunit/card.test.js`) and integration testing (`js/test/qunit/integration/trickFlow.test.js`).
+  - Fixed integration tests for "Complete trick flow with rule enforcement" and "Winning card determination and animation" that were previously failing.
+  - All tests now run through a Python server on port 8000 as documented in `/docs/browserServerConfig.md`.
   
-  - **Integration Tests**: The tests need to ensure that the game functions as expected when different components interact (e.g., when a human player makes a move and the AI responds).
-  - **Rule Enforcement**: Additional tests are needed to validate the suit-following rules and check for invalid plays (like playing out of turn or violating suit constraints).
+- **Integration Tests**: 
+  - The integration tests now properly validate game flow, including:
+    - Rule enforcement for leading with Spades
+    - Card selection and play validation
+    - Winning card determination and animation
+    - Books counting and team score updates
+  
+- **Test Infrastructure**:
+  - Established a clear pattern for writing QUnit tests with proper setup and teardown.
+  - Added support for asynchronous testing to handle animations and timing-dependent operations.
+  - Improved test isolation to prevent test interference.
 
 ---
 
@@ -35,14 +48,15 @@ This document provides a summary of the current progress, goals, and future step
 
 ### Immediate Goals
 
-1. **Fix Existing Game Rules**:
+1. **Complete QUnit Migration**:
+   - Migrate remaining unit tests to QUnit framework
+   - Replace the original test.html with the QUnit version once all tests are migrated
+   - Add more comprehensive test coverage for edge cases
+
+2. **Fix Existing Game Rules**:
    - Ensure the card visibility issue is resolved (cards should stay visible until the trick ends).
    - Implement stricter rule enforcement to prevent invalid plays.
    - Add animations or visual cues to highlight the winning card of a trick.
-
-2. **Write Valid Integration Tests**:
-   - Focus on writing tests that cover the entire game flow (e.g., a full trick from start to finish, with proper enforcement of suit-following and trumping rules).
-   - Test edge cases such as when the human player has no cards in the lead suit, or when spades are played.
 
 3. **Improve AI Strategy**:
    - Refine the computer players' strategy (currently implemented with basic logic) to make the game more engaging.

@@ -38,6 +38,32 @@ The custom testing framework is designed to validate the game’s rules, logic, 
 2. **AI Strategy Testing**: Test the AI’s decision-making process for selecting cards to play based on hand and game state.
 3. **UI Testing**: Verify that the correct cards are displayed, and that the game flow is smooth (e.g., players can see the cards played, the game state updates appropriately).
 
+#### Automation Setup and Environment Configuration
+
+###### Python Server for Browser Testing
+
+When executing browser-related tests, it is crucial to ensure that the Python server is running on **port 8000**. The server should be started before any tests that require browser interaction, and it should be stopped after the tests are complete.
+
+For detailed instructions on how to start and stop the Python server, please refer to the **[Python Browser Server Configuration](docs/browserServerConfig.md)**.
+
+###### Automation Flow:
+
+1. **Start Python Server**:
+   - Before running browser tests, execute the command `python -m http.server 8000` to start the server.
+  
+2. **Test Execution**:
+   - Run the tests related to browser functionality.
+  
+3. **Stop Python Server**:
+   - After the tests are finished, stop the server using **Ctrl+C**.
+
+The proper server setup ensures that the Python-based backend is available for the frontend (browser) interactions during testing.
+
+## Integration in the Cline System
+
+Ensure that the Cline system automates the starting and stopping of the server as part of the testing process. The system should check for the server's availability before running browser tests and ensure it’s stopped afterward to avoid conflicts with other tasks or services.
+
+
 ### Integration with Cline
 
 - The testing framework is integrated with **Cline** to automate the testing process, track changes, and ensure that the game logic evolves correctly as the game grows in complexity.

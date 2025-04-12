@@ -8,6 +8,7 @@ import { handTest } from './hand.test.js';
 import { legalPlayRulesTest } from './legalPlayRules.test.js';
 import { playerTest } from './player.test.js';
 import { playStrategyTest } from './stratagies/play/playStrategy.test.js';
+import { trickFlowIntegrationTest } from './integration/trickFlow.test.js';
 
 export function runTests() {
   cardTest();
@@ -18,6 +19,10 @@ export function runTests() {
   legalPlayRulesTest();
   playStrategyTest();
   playerTest();
+  
+  // Run integration tests
+  console.log('Running integration tests...');
+  trickFlowIntegrationTest();
 }
 
 window.addEventListener('DOMContentLoaded', runTests);

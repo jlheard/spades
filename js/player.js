@@ -31,7 +31,17 @@ export class Player {
     return this.hand;
   }
 
-  populateHandElement(handElement, spadesBroken = false) {
+  getInvalidReason(card, leadingSuit, spadesBroken) {
+    if (leadingSuit === null && card.suit === 'Spades' && !spadesBroken) {
+      return "Can't lead with Spades until they're broken";
+    } else if (leadingSuit !== null && card.suit !== leadingSuit && 
+               this.hand.cards.some(c => c.suit === leadingSuit)) {
+      return `Must follow suit (${leadingSuit})`;
+    }
+    return "Invalid play";
+  }
+
+  populateHandElement(handElement, spadesBroken = false, leadingSuit = null) {
     if (!handElement) {
       return;
     }
@@ -46,7 +56,7 @@ export class Player {
       cardsBySuit[card.suit].push(card);
     });
 
-    const validPlaysMap = this.hand.getLegalPlaysMap(null, spadesBroken);
+    const validPlaysMap = this.hand.getLegalPlaysMap(leadingSuit, spadesBroken);
     const validPlays = Array.from(validPlaysMap.values());
 
     Object.values(cardsBySuit).forEach(cards => {
@@ -60,13 +70,37 @@ export class Player {
         cardElement.classList.add('card');
         cardElement.classList.add('south');
         cardElement.classList.add(`suit-${card.suit.toLowerCase()}`);
-        cardElement.innerHTML = `<div class="card-content">${card.rank}&nbsp;${getSuitSymbol(card.suit)}</div>`;
-
+        
         // Check if the card value exists in validPlays
-        if (validPlays.includes(card)) {
+        const isValid = validPlays.some(validCard => 
+          validCard.rank === card.rank && validCard.suit === card.suit);
+        
+        if (isValid) {
           cardElement.classList.add('valid-play');
+        } else {
+          cardElement.classList.add('invalid-play');
+          
+          // Add title attribute with reason for invalid play
+          const reason = this.getInvalidReason(card, leadingSuit, spadesBroken);
+          cardElement.setAttribute('title', reason);
+          
+          // Add event listeners for hover to show tooltip
+          cardElement.addEventListener('mouseover', () => {
+            if (cardElement.querySelector('.error-tooltip')) return;
+            
+            const tooltip = document.createElement('div');
+            tooltip.classList.add('error-tooltip');
+            tooltip.textContent = reason;
+            cardElement.appendChild(tooltip);
+          });
+          
+          cardElement.addEventListener('mouseout', () => {
+            const tooltip = cardElement.querySelector('.error-tooltip');
+            if (tooltip) cardElement.removeChild(tooltip);
+          });
         }
-
+        
+        cardElement.innerHTML = `<div class="card-content">${card.rank}&nbsp;${getSuitSymbol(card.suit)}</div>`;
         cardGroup.appendChild(cardElement);
       });
 
@@ -74,8 +108,8 @@ export class Player {
     });
   }
 
-  updateHandElement(spadesBroken) {
+  updateHandElement(spadesBroken, leadingSuit = null) {
     const handElement = document.getElementById('player-hand');
-    this.populateHandElement(handElement, spadesBroken);
+    this.populateHandElement(handElement, spadesBroken, leadingSuit);
   }
 }

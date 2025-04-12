@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<!--
+  IMPORTANT: This file must be accessed through a Python server on port 8000.
+  Do not open this file directly from the filesystem.
+  
+  To run the tests:
+  1. Start the Python server: python -m http.server 8000
+  2. Navigate to: http://localhost:8000/qunit-test.html
+  3. After testing, stop the server with Ctrl+C
+  
+  For more details, see docs/browserServerConfig.md
+-->
+<html>
+<head>
+  <title>Spades - QUnit Tests</title>
+  <link rel="stylesheet" href="https://code.jquery.com/qunit/qunit-2.19.1.css">
+  <meta charset="utf-8">
+</head>
+<body>
+  <div id="qunit"></div>
+  <div id="qunit-fixture"></div>
+  
+  <script src="https://code.jquery.com/qunit/qunit-2.19.1.js"></script>
+  
+  <!-- Game source files -->
+  <script src="js/card.js" type="module"></script>
+  <script src="js/deck.js" type="module"></script>
+  <script src="js/hand.js" type="module"></script>
+  <script src="js/legalPlayRules.js" type="module"></script>
+  <script src="js/player.js" type="module"></script>
+  <script src="js/game.js" type="module"></script>
+  <script src="js/turn.js" type="module"></script>
+  <script src="js/cardComparer.js" type="module"></script>
+  <script src="js/stratagies/play/playStrategy.js" type="module"></script>
+  <script src="js/stratagies/play/smartPlayStrategy.js" type="module"></script>
+  
+  <!-- Test files -->
+  <script src="js/test/qunit/card.test.js" type="module"></script>
+  <script src="js/test/qunit/integration/trickFlow.test.js" type="module"></script>
+</body>
+</html>
