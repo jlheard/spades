@@ -32,3 +32,22 @@ All notable changes to the Spades project will be documented in this file.
 - Added documentation for Python server requirements for browser testing
 - Added server configuration instructions to test files
 - Added debug logging to rule enforcement logic
+- Added comprehensive integration tests:
+  - Game initialization tests for proper setup and card dealing
+  - Spades breaking rule tests for correct rule enforcement
+  - Trick winning logic tests for various card combinations
+  - Player strategy tests for AI decision-making
+  - Unusual card distribution tests for edge cases
+  - Error handling tests for invalid plays and state changes
+- Added testing-notes.md documentation with specific guidance for testing the Spades game implementation
+- Added documentation about joker naming conventions and test reliability
+- Added guidance on refreshing the page to ensure tests pass consistently
+
+### Fixed
+- Fixed joker card creation in trickWinning.test.js to use correct rank names ('BigJoker' and 'ExtraJoker')
+- Updated gameRules.md to clarify the naming discrepancy between documentation and code implementation
+- Enhanced testing-notes.md with specific examples of correct joker card creation
+- Fixed timing issues in animation tests by increasing timeouts
+- Improved DOM cleanup in gameInitialization.test.js using try/finally blocks
+- Enhanced SmartPlayStrategy to properly handle partner-winning scenarios
+- Fixed joker card creation in unusualDistributions.test.js to use correct rank names

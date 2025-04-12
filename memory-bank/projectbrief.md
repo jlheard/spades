@@ -29,6 +29,8 @@ The initial focus is on a functional browser-based game, with potential future e
   - Automating repetitive coding tasks
 - Build a modular, maintainable codebase with clean separation of concerns (e.g., card logic, player AI, game flow).
 - Validate game logic through unit tests and gameplay simulations.
+  - The file `docs/testing-notes.md` contains notes for common pitfalls when testing.
+  - The file `docs/test-migration-guide.md` contains updates to the testing strategy.
 
 ## Future Possibilities
 

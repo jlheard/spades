@@ -56,8 +56,17 @@ export class Player {
       cardsBySuit[card.suit].push(card);
     });
 
-    const validPlaysMap = this.hand.getLegalPlaysMap(leadingSuit, spadesBroken);
-    const validPlays = Array.from(validPlaysMap.values());
+    // At the start of the game (when called from Game constructor), 
+    // mark all cards as valid plays
+    let validPlays;
+    if (handElement.id === 'player-hand' && document.querySelectorAll('.play-area .card').length === 0) {
+      // This is the initial setup - all cards are valid
+      validPlays = [...this.hand.cards];
+    } else {
+      // Normal gameplay - use legal play rules
+      const validPlaysMap = this.hand.getLegalPlaysMap(leadingSuit, spadesBroken);
+      validPlays = Array.from(validPlaysMap.values());
+    }
 
     Object.values(cardsBySuit).forEach(cards => {
       cards.sort((a, b) => RANKS.indexOf(a.rank) - RANKS.indexOf(b.rank));

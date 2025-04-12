@@ -183,7 +183,12 @@ export class Turn {
             
             // Highlight winning card with animation
             if (winningCardElement) {
+                // Force a reflow before adding the animation class to ensure it's applied
+                void winningCardElement.offsetWidth;
                 winningCardElement.classList.add('winning-card-animation');
+                
+                // Also add a data attribute to make it easier to test
+                winningCardElement.setAttribute('data-winning-card', 'true');
             }
             
             // Update books

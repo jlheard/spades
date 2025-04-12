@@ -12,10 +12,11 @@ This file defines the canonical rules for the Spades card game as implemented in
 2. **Card Deck**
 
    - Custom 52-card deck including:
-     - **Two Jokers**: Big Joker and Little Joker (referred to as Big and Extra in UI).
+     - **Two Jokers**: Big Joker and Little Joker (implemented as 'BigJoker' and 'ExtraJoker' in code).
      - **Removed Cards**: 2 of Clubs and 2 of Hearts.
    - Suits: Spades, Hearts, Diamonds, Clubs.
    - Ranks (high to low): Big Joker, Little Joker, A, K, Q, J, 10, 9, 8, 7, 6, 5, 4, 3, 2 (excluding 2♣ and 2♥).
+   - **Note for Developers**: In the code implementation, jokers have the suit 'Spades' and ranks 'BigJoker' and 'ExtraJoker'.
 
 3. **Spades Are Always Trump**
 
