@@ -232,27 +232,25 @@ QUnit.test('Animation works for all player positions', function(assert) {
     // Clear the play area
     this.mockPlayArea.innerHTML = '';
     
-    // Manually set up a trick with known cards
-    const cards = [
-      new Card('A', 'Hearts'),
-      new Card('K', 'Hearts'),
-      new Card('Q', 'Hearts'),
-      new Card('J', 'Hearts')
-    ];
-    
     // Create card elements in the play area
     const cardElements = [];
     const positions = ['south', 'west', 'north', 'east'];
     
+    // Create cards with the current test position's card as the winner (Ace)
+    const cards = [];
     for (let j = 0; j < 4; j++) {
+      // Make the current test position's card an Ace, others lower ranks
+      const rank = (j === i) ? 'A' : ['K', 'Q', 'J', '10'][j % 4];
+      cards.push(new Card(rank, 'Hearts'));
+      
       const cardElement = document.createElement('div');
       cardElement.className = `card ${positions[j]}`;
-      cardElement.innerHTML = `<div class="card-content">${cards[j].rank}&nbsp;${cards[j].suit === 'Hearts' ? '♥' : cards[j].suit}</div>`;
+      cardElement.innerHTML = `<div class="card-content">${rank}&nbsp;♥</div>`;
       this.mockPlayArea.appendChild(cardElement);
       cardElements.push(cardElement);
     }
     
-    // Set up the playerForPlayedCardMap with the current player as the winner
+    // Set up the playerForPlayedCardMap
     turn.playerForPlayedCardMap.clear();
     for (let j = 0; j < 4; j++) {
       turn.playerForPlayedCardMap.set(cards[j], this.players[j]);

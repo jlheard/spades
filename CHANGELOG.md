@@ -18,6 +18,12 @@ All notable changes to the Spades project will be documented in this file.
 - Simplified rule logic in LegalPlayRules.js for better maintainability
 
 ### Added
+- Added comprehensive QUnit unit tests for core components:
+  - Card class tests with full coverage of all methods and edge cases
+  - Deck class tests for initialization, shuffling, and dealing
+  - Hand class tests for card management and legal play determination
+  - LegalPlayRules tests for all rule combinations and edge cases
+  - CardComparer tests for trick winning determination
 - Added specific tests for rule enforcement edge cases
 - Added tests for card animation visibility and behavior
 - Added support for asynchronous testing of animations

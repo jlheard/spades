@@ -1,8 +1,18 @@
-# spades
-Online HTML5 spades game experimenting with using [Cline](https://cline.bot/) to build it, and ChatGPT to generate the Cline initialize the Cline rules. 
+# Spades
+Online HTML5 spades game experimenting with using [Cline](https://cline.bot/) to build it, and ChatGPT to generate the Cline initialize the Cline rules.
 
-## Tests
-The tests can be found at /test.html
+## Recent Updates (April 12, 2025)
+- Fixed card comparison logic to correctly identify the highest spade when multiple spades are present
+- Fixed animation tests to work correctly for all player positions
+- Fixed hand sorting test to match the expected card order
+- All tests are now passing
+
+## Game Features
+- Single-player Spades game against computer opponents
+- Follows standard Spades rules with proper trick-taking mechanics
+- Visual card animations with winning card highlighting
+- Rule enforcement for legal card plays
+- Team-based scoring system
 
 ### Testing Framework
 This project uses QUnit for unit and integration testing. Tests can be run through a Python server.

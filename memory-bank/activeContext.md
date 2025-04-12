@@ -21,12 +21,48 @@ We will prioritize fixing the rule enforcement issue first, followed by the UI/a
    - When East player wins a book
    - The winning animation (gold glow and pulse) works correctly
    - But the card value doesn't display properly during the animation
+   - Integration test #14 "Animation works for all player positions" is failing
 
 ## Implementation Plan
 
-### Phase 1: Rule Enforcement Fix (Priority)
+### Phase 1: Complete Unit Test Suite
 
-#### 1. Diagnostic Testing (1-2 days)
+We'll create a comprehensive set of unit tests for each core component, ensuring we test all public methods and key functionality:
+
+#### 1. Core Component Testing
+- **Card & Deck Tests**:
+  - Test card creation, comparison, and validation
+  - Test deck creation, shuffling, and dealing
+
+- **LegalPlayRules Tests**:
+  - Test all rule combinations (leading, following, spades broken/not broken)
+  - Test edge cases for rule enforcement
+  - Verify correct behavior when player has no cards of the leading suit
+
+- **Hand Tests**:
+  - Test card management (adding/removing cards)
+  - Test sorting functionality
+  - Test legal play determination with various hand configurations
+
+- **Player Tests**:
+  - Test hand population and UI representation
+  - Test valid/invalid play determination
+  - Test team assignment and scoring
+
+- **Turn Tests**:
+  - Test turn progression
+  - Test card playing logic
+  - Test trick completion and winner determination
+
+#### 2. Manual Test Verification
+- Create a checklist of all public methods in each class
+- Ensure each method has at least one test case
+- Add temporary console logging to track method execution
+- Create visual test pages that demonstrate specific functionality
+
+### Phase 2: Rule Enforcement Fix (Priority)
+
+#### 1. Diagnostic Testing
 - Create `js/test/qunit/ruleEnforcement.test.js` with specific test cases:
   - Test playing spades when player has no cards of the leading suit
   - Test playing other suits when player has no cards of the leading suit
@@ -36,7 +72,7 @@ We will prioritize fixing the rule enforcement issue first, followed by the UI/a
   - `Hand.getLegalPlaysMap()`
   - `Player.populateHandElement()`
 
-#### 2. Fix Implementation (2-3 days)
+#### 2. Fix Implementation
 - Fix the rule enforcement logic:
   - Ensure `handDoesNotHaveLeadingSuit` is correctly determined
   - Verify the logic in `LegalPlayRules.isCardLegalToPlay()` for playing spades
@@ -46,20 +82,21 @@ We will prioritize fixing the rule enforcement issue first, followed by the UI/a
   - Update `LegalPlayRules` to return these detailed results
   - Ensure UI properly reflects these validation results
 
-#### 3. Verification (1 day)
+#### 3. Verification
 - Create a specific test HTML file that focuses on this scenario
 - Implement a simplified game setup that consistently reproduces the issue
 - Verify the fix works in both test and actual gameplay
 
-### Phase 2: UI/UX Improvements
+### Phase 3: UI/Animation Improvements
 
-#### 1. Card Animation Diagnostics (1 day)
+#### 1. Card Animation Diagnostics
+- Fix the failing integration test #14 "Animation works for all player positions"
 - Create `js/test/qunit/cardAnimation.test.js` with test cases for:
   - Card content visibility during animation
   - Animation highlighting for the winning card
   - Animation behavior for all player positions
 
-#### 2. Animation Improvements (2-3 days)
+#### 2. Animation Improvements
 - Enhance the winning card animation:
   - Ensure card content (rank and suit) remains visible
   - Add a "Winner" label or icon to the winning card
@@ -68,10 +105,12 @@ We will prioritize fixing the rule enforcement issue first, followed by the UI/a
   - Add a larger, centered display of the winning card value
   - Ensure consistent rendering across different card ranks and suits
 
-#### 3. General UI Improvements (2 days)
-- Enhance error messaging and tooltips
-- Improve card visibility and contrast
-- Add visual cues for the current state of play
+### Phase 4: Integration Tests
+
+- Create comprehensive integration tests for common gameplay scenarios
+- Test the interaction between multiple components
+- Verify that all components work together correctly
+- Test edge cases and unusual card distributions
 
 ## Technical Approach
 

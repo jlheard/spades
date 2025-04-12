@@ -22,10 +22,13 @@ export function compareCardsForTurn(playerForPlayedCardMap) {
     return winningSpade;
   } else {
     // Check if any other card is a spade
-    const hasSpades = otherCards.some(card => card.suit === 'Spades');
+    const otherSpades = otherCards.filter(card => card.suit === 'Spades');
 
-    if (hasSpades) {
-      return otherCards.find(card => card.suit === 'Spades'); // Other spades present, find the first spade card as the winner
+    if (otherSpades.length > 0) {
+      // Find the highest ranked spade
+      return otherSpades.reduce((highestSpade, spade) => {
+        return RANKS.indexOf(spade.rank) < RANKS.indexOf(highestSpade.rank) ? spade : highestSpade;
+      }, otherSpades[0]);
     } else {
       let winningCard = leadCard;
 
