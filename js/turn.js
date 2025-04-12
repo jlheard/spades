@@ -33,7 +33,7 @@ export class Turn {
             if (this.selectedCard) {
                 if (clickedCardElement === this.selectedCard && this.cardNotPlayed) {
                     // Clear the play area
-                    playAreaElement.innerHTML = '';
+                    // playAreaElement.innerHTML = '';
                     this.putCardInPile(playAreaElement);
                     this.nextComputerTurn();
                 } else {
@@ -61,6 +61,10 @@ export class Turn {
             // Track the played card and corresponding player
             this.playerForPlayedCardMap.set(card, this.currentPlayer);
 
+            if(!this.spadesBroken && card.suit === 'Spades') {
+                this.spadesBroken = true
+            }            
+
             this.selectedCard = null;
             this.cardNotPlayed = false;
 
@@ -79,14 +83,15 @@ export class Turn {
     playCard() {
         if (this.currentPlayer.isComputer) {
             this.computerPlayCard();
-        } 
+        }
     }
 
     computerPlayCard() {
-        const strategy = new PlayStrategy(this.currentPlayer);
+        const strategy = this.currentPlayer.strategy;
 
         const lastPlayedCardElement = document.querySelector('.play-area .card:last-child .card-content');
-        const lastPlayedCard = Card.fromCardContentDivElement(lastPlayedCardElement);
+        const lastPlayedCard = lastPlayedCardElement != null 
+            ? Card.fromCardContentDivElement(lastPlayedCardElement) : null;
         const playedCard = strategy.playCard(this.playerForPlayedCardMap, lastPlayedCard, this.spadesBroken);
 
         if (!this.spadesBroken && playedCard.suit === 'Spades') {
@@ -106,41 +111,56 @@ export class Turn {
 
         this.cardsPlayed++;
 
-        this.playNextTurn();        
+        this.playNextTurn();
     }
 
     playNextTurn() {
-        if (this.cardsPlayed === this.players.length) {
-          // All players have played a card, compare and determine the winning player
-          const winningCard = compareCardsForTurn(this.playerForPlayedCardMap);
-          const winningPlayer = this.playerForPlayedCardMap.get(winningCard);
-      
-          // Update the number of books made by the winning player's team
-          if (winningPlayer.team === 1) {
-            // Update team 1's books
-            const team1BooksElement = document.querySelector('.team1-books');
-            let team1Books = parseInt(team1BooksElement.textContent.split(':')[1].trim());
-            team1Books++;
-            team1BooksElement.textContent = `Our Books: ${team1Books} / Bid: 0`;
-          } else if (winningPlayer.team === 2) {
-            // Update team 2's books
-            const team2BooksElement = document.querySelector('.team2-books');
-            let team2Books = parseInt(team2BooksElement.textContent.split(':')[1].trim());
-            team2Books++;
-            team2BooksElement.textContent = `Their Books: ${team2Books} / Bid: 0`;
-          }
-      
-          this.playerForPlayedCardMap.clear();
-          this.cardsPlayed = 0;
+        if(this.cardsPlayed >= 4) {
+            // All players have played a card, compare and determine the winning player
+            const winningCard = compareCardsForTurn(this.playerForPlayedCardMap);
+            const winningPlayer = this.playerForPlayedCardMap.get(winningCard);
+
+            // Update the number of books made by the winning player's team
+            if (winningPlayer.team === 1) {
+                // Update team 1's books
+                const team1BooksElement = document.querySelector('.team1-books');
+                let team1Books = parseInt(team1BooksElement.textContent.split(':')[1].trim());
+                team1Books++;
+                team1BooksElement.textContent = `Our Books: ${team1Books} / Bid: 0`;
+            } else if (winningPlayer.team === 2) {
+                // Update team 2's books
+                const team2BooksElement = document.querySelector('.team2-books');
+                let team2Books = parseInt(team2BooksElement.textContent.split(':')[1].trim());
+                team2Books++;
+                team2BooksElement.textContent = `Their Books: ${team2Books} / Bid: 0`;
+            }
+
+            this.playerForPlayedCardMap.clear();
+            this.cardsPlayed = 0;
+            this.spadesBroken = false;
+
+            // set the current player index to the winner
+            this.currentPlayerIndex = this.players.findIndex(player => player.name === winningPlayer.name);
+            this.currentPlayer = winningPlayer;
+
+            // if (winningPlayer.isComputer) {
+                const playAreaElement = document.querySelector('.play-area');
+                // Clear the play area
+                playAreaElement.innerHTML = '';
+            // }
+
+            // Update the hand element for the human player to get the valid plays before the next turn
+            this.players[0].updateHandElement(this.spadesBroken);            
+        } else {
+            this.setNextPlayerToCurrent();
         }
 
-        this.setNextPlayerToCurrent();
-      
         // Play the card for the current player
         this.playCard();
-        this.cardNotPlayed = true;        
-      }
-      
+        this.cardNotPlayed = !this.currentPlayer.isComputer; // this is only set to true win the human player has yet to play.
+    }
+
+
 
     setNextPlayerToCurrent() {
         const currentPlayerIndex = this.players.findIndex(player => player.name === this.currentPlayer.name);
