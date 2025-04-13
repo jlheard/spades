@@ -9,6 +9,7 @@ All notable changes to the Spades project will be documented in this file.
 - Rewrote integration tests for trick flow and animation
 - Improved test reliability for DOM interactions
 - Enhanced winning card animation with "WINNER" label and improved visibility
+- Changed hand sorting to display cards in descending order (highest value first) to match how most players read cards from left to right
 
 ### Fixed
 - Fixed rule enforcement bug: Players can now play spades when they don't have the leading suit
@@ -51,3 +52,6 @@ All notable changes to the Spades project will be documented in this file.
 - Improved DOM cleanup in gameInitialization.test.js using try/finally blocks
 - Enhanced SmartPlayStrategy to properly handle partner-winning scenarios
 - Fixed joker card creation in unusualDistributions.test.js to use correct rank names
+- Fixed computer players not following suit by correcting leading card determination in Turn.js
+- Improved PlayStrategy implementation to prioritize following suit when possible
+- Added extensive logging to help diagnose gameplay issues

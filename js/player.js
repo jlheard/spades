@@ -56,17 +56,12 @@ export class Player {
       cardsBySuit[card.suit].push(card);
     });
 
-    // At the start of the game (when called from Game constructor), 
-    // mark all cards as valid plays
+    // Get valid plays based on the game rules
     let validPlays;
-    if (handElement.id === 'player-hand' && document.querySelectorAll('.play-area .card').length === 0) {
-      // This is the initial setup - all cards are valid
-      validPlays = [...this.hand.cards];
-    } else {
-      // Normal gameplay - use legal play rules
-      const validPlaysMap = this.hand.getLegalPlaysMap(leadingSuit, spadesBroken);
-      validPlays = Array.from(validPlaysMap.values());
-    }
+    
+    // Even at the start of the game, we need to respect the spades breaking rule
+    const validPlaysMap = this.hand.getLegalPlaysMap(leadingSuit, spadesBroken);
+    validPlays = Array.from(validPlaysMap.values());
 
     Object.values(cardsBySuit).forEach(cards => {
       cards.sort((a, b) => RANKS.indexOf(a.rank) - RANKS.indexOf(b.rank));

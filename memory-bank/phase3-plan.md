@@ -7,6 +7,7 @@ Phase 3 will focus on enhancing the game's user experience, improving AI strateg
 ## Goals
 
 ### 1. Enhanced User Interface
+- ✅ Improved hand sorting to display cards in descending order (highest value first), matching how most players naturally read their hand
 - Improve card animations and visual feedback
 - Add sound effects for card plays, trick wins, and game events
 - Create a more intuitive and responsive layout

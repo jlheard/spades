@@ -20,14 +20,60 @@ export class PlayStrategy {
     }
 
     chooseCardToPlay(validPlays, playerForPlayedCardMap, leadingCard) {
-        // Implement your smart player strategy here
-        // Use the information of played cards and the leading card to make a strategic decision
-        // Consider factors such as card valuation, suit management, trump management, trick-taking estimation, and risk assessment
-        // Analyze the game state, remaining cards, and opponent behavior to determine the best card to play
-
-        // Placeholder implementation: Randomly choose a card from the valid plays
-        const randomIndex = Math.floor(Math.random() * validPlays.length);
-        return validPlays[randomIndex];
+        // If there are no valid plays, return null
+        if (!validPlays || validPlays.length === 0) {
+            console.log("No valid plays available");
+            return null;
+        }
+        
+        // Log the valid plays for debugging
+        console.log(`Valid plays for ${this.player.name}:`, validPlays.map(card => `${card.rank} of ${card.suit}`).join(', '));
+        
+        // If there's a leading card, prioritize following suit
+        if (leadingCard) {
+            const leadingSuit = leadingCard.suit;
+            console.log(`Leading suit is ${leadingSuit}`);
+            
+            // Filter cards that match the leading suit
+            const suitMatchingCards = validPlays.filter(card => card.suit === leadingSuit);
+            
+            // If we have cards of the leading suit, play one of those
+            if (suitMatchingCards.length > 0) {
+                console.log(`${this.player.name} has ${suitMatchingCards.length} cards of the leading suit`);
+                
+                // Sort by rank (lowest to highest) and play the lowest card that follows suit
+                suitMatchingCards.sort((a, b) => this.getRankValue(a.rank) - this.getRankValue(b.rank));
+                return suitMatchingCards[0];
+            } else {
+                console.log(`${this.player.name} has no cards of the leading suit`);
+            }
+        }
+        
+        // If no leading card or no cards of the leading suit, play strategically
+        // For now, just play the lowest card to avoid wasting high cards
+        validPlays.sort((a, b) => this.getRankValue(a.rank) - this.getRankValue(b.rank));
+        return validPlays[0];
+    }
+    
+    getRankValue(rank) {
+        const rankValues = {
+            'BigJoker': 15,
+            'ExtraJoker': 14,
+            'A': 13,
+            'K': 12,
+            'Q': 11,
+            'J': 10,
+            '10': 9,
+            '9': 8,
+            '8': 7,
+            '7': 6,
+            '6': 5,
+            '5': 4,
+            '4': 3,
+            '3': 2,
+            '2': 1
+        };
+        return rankValues[rank] || 0;
     }
 
     throwLowestRankingCard(validPlays) {

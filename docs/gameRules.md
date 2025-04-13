@@ -60,7 +60,13 @@ This file defines the canonical rules for the Spades card game as implemented in
    - Do not allow invalid plays (e.g., playing off-suit when holding matching suit).
    - Validate Joker play: Jokers may only be played if the player cannot follow suit.
 
-3. **Player Experience**
+3. **Card Display Order**
+
+   - Cards in a player's hand are sorted in descending order (highest value first).
+   - Cards are sorted by suit first, then by rank within each suit.
+   - This ordering matches how most players naturally read their hand from left to right.
+
+4. **Player Experience**
 
    - Allow time for the player to see what happened in a trick before clearing the board.
    - Animate or highlight the winning card of the trick.

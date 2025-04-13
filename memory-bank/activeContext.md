@@ -2,7 +2,9 @@
 
 ## Current Focus
 
-The immediate goal is to address specific gameplay issues identified during testing. We've successfully migrated to QUnit for testing, but have discovered two critical issues that need to be fixed:
+We've made progress on improving the user experience by changing the hand sorting to display cards in descending order (highest value first), which matches how most players naturally read their hand from left to right. This change has been documented in CHANGELOG.md, README.md, and docs/gameRules.md.
+
+The immediate goal is to continue addressing specific gameplay issues identified during testing. We've successfully migrated to QUnit for testing, but have discovered two critical issues that need to be fixed:
 
 1. **Rule Enforcement Bug**: Players cannot play spades when they don't have the leading suit (clubs), which contradicts the game rules.
 2. **UI/Animation Issue**: The winning card animation works, but the value of the card isn't displayed properly.

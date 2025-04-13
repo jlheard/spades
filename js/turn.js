@@ -31,7 +31,7 @@ export class Turn {
             }
             
             // Check if the card is a valid play
-            if (!clickedCardElement.classList.contains('valid-play')) {
+            if (clickedCardElement.classList.contains('invalid-play')) {
                 // Show error message or tooltip
                 this.showInvalidCardMessage(clickedCardElement);
                 return;
@@ -100,6 +100,7 @@ export class Turn {
             this.playerForPlayedCardMap.set(card, this.currentPlayer);
 
             if(!this.spadesBroken && card.suit === 'Spades') {
+                console.log(`Spades broken by ${this.currentPlayer.name}`);
                 this.spadesBroken = true
             }            
 
@@ -130,10 +131,16 @@ export class Turn {
     computerPlayCard() {
         const strategy = this.currentPlayer.strategy;
 
-        const lastPlayedCardElement = document.querySelector('.play-area .card:last-child .card-content');
-        const lastPlayedCard = lastPlayedCardElement != null 
-            ? Card.fromCardContentDivElement(lastPlayedCardElement) : null;
-        const playedCard = strategy.playCard(this.playerForPlayedCardMap, lastPlayedCard, this.spadesBroken);
+        // Get the leading card (first card played in the trick)
+        const leadingCardElement = document.querySelector('.play-area .card:first-child .card-content');
+        const leadingCard = leadingCardElement != null 
+            ? Card.fromCardContentDivElement(leadingCardElement) : null;
+        
+        console.log(`Computer player ${this.currentPlayer.name} is playing with leading suit: ${leadingCard ? leadingCard.suit : 'null'}`);
+        
+        const playedCard = strategy.playCard(this.playerForPlayedCardMap, leadingCard, this.spadesBroken);
+        
+        console.log(`Computer player ${this.currentPlayer.name} played ${playedCard.rank} of ${playedCard.suit}`);
 
         if (!this.spadesBroken && playedCard.suit === 'Spades') {
             this.spadesBroken = true;

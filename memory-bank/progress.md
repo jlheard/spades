@@ -17,6 +17,7 @@ This document provides a summary of the current progress, goals, and future step
   - The rule that "If a player has no cards in the suit led, they may play any card, including jokers and spades" is not being properly enforced.
 
 - **UI/UX**:
+  - Changed hand sorting to display cards in descending order (highest value first) to match how most players read cards from left to right. This change has been documented in CHANGELOG.md, README.md, and docs/gameRules.md.
   - The winning card animation (gold glow and pulse) works correctly, but the card value doesn't display properly during the animation.
   - The game's current UI does not clearly show what cards have been played, making it difficult to follow the flow of the game.
 

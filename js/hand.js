@@ -17,9 +17,9 @@ export class Hand {
     sortCards() {
         this.cards.sort((a, b) => {
             if (a.suit !== b.suit) {
-                return SUITS.indexOf(a.suit) - SUITS.indexOf(b.suit);
+                return SUITS.indexOf(b.suit) - SUITS.indexOf(a.suit);
             } else {
-                return RANKS.indexOf(a.rank) - RANKS.indexOf(b.rank);
+                return RANKS.indexOf(b.rank) - RANKS.indexOf(a.rank);
             }
         });
     }
