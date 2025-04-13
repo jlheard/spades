@@ -112,6 +112,28 @@ We added robust error handling to prevent crashes when a computer player has no 
    - `getFallbackCard`: Provides a fallback card if the strategy returns null
    - `endTrickEarly`: Gracefully ends a trick if no cards can be played
 
+### 3. Fixed Double Card Removal
+
+We fixed a critical bug where computer players were playing more than one card per turn, causing them to run out of cards prematurely:
+
+1. **Identified the issue**: Cards were being removed from the computer player's hand twice:
+   - Once in the `playCard()` method of the `PlayStrategy` class
+   - Again implicitly when the card was tracked in the `playerForPlayedCardMap` in the Turn class
+
+2. **Implemented the fix**:
+   - Removed the line that removes the card from the player's hand in the `playCard()` method of the strategy:
+   ```javascript
+   // Removed this line
+   this.player.hand.removeCard(cardToPlay);
+   ```
+   - Added explicit card removal in the `handleComputerCardPlay()` method of the Turn class:
+   ```javascript
+   // Added this line
+   this.currentPlayer.hand.removeCard(playedCard);
+   ```
+
+This change ensures that each card is removed from the player's hand exactly once, fixing the issue where computer players were playing more than one card per turn.
+
 ## Consequences
 
 ### Positive

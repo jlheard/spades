@@ -13,9 +13,7 @@ export class PlayStrategy {
         // Choose a card to play based on the computer player's strategy
         const cardToPlay = this.chooseCardToPlay(validPlays, playerForPlayedCardMap, leadingCard);
 
-        // Remove the played card from the computer player's hand
-        this.player.hand.removeCard(cardToPlay);
-
+        // Card removal is now handled by the Turn class in handleComputerCardPlay()
         return cardToPlay;
     }
 
@@ -87,7 +85,7 @@ export class PlayStrategy {
 
     throwLowestRankingCard(validPlays) {
         // Sort the valid plays in ascending order based on rank
-        const sortedPlays = validPlays.sort((a, b) => a.rank - b.rank);
+        const sortedPlays = validPlays.sort((a, b) => this.getRankValue(a.rank) - this.getRankValue(b.rank));
 
         // Choose the lowest-ranking card from the sorted plays
         const chosenCard = sortedPlays[0];
@@ -104,18 +102,24 @@ export class PlayStrategy {
     throwLowestCardInCutSuit(validPlays, partnerCard) {
         // Find the lowest-ranked card in the cut suit (spades)
         const cutSuitCards = validPlays.filter(card => card.suit === 'Spades');
-        const lowestCutCard = cutSuitCards.reduce((minCard, card) => card.rank < minCard.rank ? card : minCard);
-
-        // If there are cut suit cards, play the lowest-ranked card
-        if (lowestCutCard) {
-            return lowestCutCard;
+        
+        if (cutSuitCards.length > 0) {
+            // Sort by rank (lowest to highest) and return the lowest card
+            cutSuitCards.sort((a, b) => this.getRankValue(a.rank) - this.getRankValue(b.rank));
+            return cutSuitCards[0];
         }
 
         // If there are no cut suit cards, find the lowest-ranked card in another suit
         const nonCutSuitCards = validPlays.filter(card => card.suit !== 'Spades');
-        const lowestNonCutCard = nonCutSuitCards.reduce((minCard, card) => card.rank < minCard.rank ? card : minCard);
+        
+        if (nonCutSuitCards.length > 0) {
+            // Sort by rank (lowest to highest) and return the lowest card
+            nonCutSuitCards.sort((a, b) => this.getRankValue(a.rank) - this.getRankValue(b.rank));
+            return nonCutSuitCards[0];
+        }
 
-        return lowestNonCutCard;
+        // Fallback: return the first valid play if both arrays are empty (shouldn't happen)
+        return validPlays[0];
     }
 
     partnerLeadsWithLastOpponent(partnerCard, playerForPlayedCardMap) {
@@ -132,14 +136,20 @@ export class PlayStrategy {
     playHighestCardInLeadSuit(validPlays, leadingCard) {
         // Find the highest-ranked card in the leading suit
         const leadSuitCards = validPlays.filter(card => card.suit === leadingCard.suit);
-        const highestLeadCard = leadSuitCards.reduce((maxCard, card) => card.rank > maxCard.rank ? card : maxCard);
-
-        return highestLeadCard;
+        
+        if (leadSuitCards.length > 0) {
+            // Sort by rank (highest to lowest) and return the highest card
+            leadSuitCards.sort((a, b) => this.getRankValue(b.rank) - this.getRankValue(a.rank));
+            return leadSuitCards[0];
+        }
+        
+        // Fallback: return the first valid play if no cards of the leading suit (shouldn't happen)
+        return validPlays[0];
     }
 
     playHighestRankingCard(validPlays) {
         // Sort the valid plays in descending order based on rank
-        const sortedPlays = validPlays.sort((a, b) => b.rank - a.rank);
+        const sortedPlays = validPlays.sort((a, b) => this.getRankValue(b.rank) - this.getRankValue(a.rank));
 
         // Choose the highest-ranking card from the sorted plays
         const chosenCard = sortedPlays[0];

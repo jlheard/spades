@@ -5,9 +5,12 @@ All notable changes to the Spades project will be documented in this file.
 ## [Unreleased]
 
 ### Fixed
+- Fixed incorrect card rank comparison in PlayStrategy methods by using getRankValue instead of direct string comparison
+- Fixed issue where computer players weren't following suit by correctly determining the leading suit from the playerForPlayedCardMap
 - Fixed critical bug where human player's hand wasn't updating correctly when a computer player led a trick, allowing invalid plays
 - Fixed incorrect card comparison logic that sometimes caused lower-ranked cards to incorrectly win tricks
 - Fixed card comparison logic to correctly handle spades and jokers, ensuring Ace of Spades beats King of Spades, Queen of Spades beats 2 of Spades, and jokers beat all other cards
+- Fixed bug where computer players were playing more than one card per turn, causing them to run out of cards prematurely
 - Fixed game crash that occurred when players had 5 or fewer cards in their hand
 - Added comprehensive error handling to prevent null reference errors
 - Added integration tests for leading suit validation and card comparison to prevent regression

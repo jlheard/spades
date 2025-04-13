@@ -65,8 +65,12 @@ export class Turn {
         
         // Determine reason for invalid play
         let reason = "Invalid play";
-        const leadingSuit = this.cardsPlayed > 0 ? 
-            Card.fromCardContentDivElement(document.querySelector('.play-area .card:first-child .card-content')).suit : null;
+        
+        // Get the leading suit from the first card played in this trick
+        let leadingSuit = null;
+        if (this.playerForPlayedCardMap.size > 0) {
+            leadingSuit = Array.from(this.playerForPlayedCardMap.keys())[0].suit;
+        }
         
         if (leadingSuit === null && card.suit === 'Spades' && !this.game.getSpadesBroken()) {
             reason = "Can't lead with Spades until they're broken";
@@ -109,8 +113,15 @@ export class Turn {
 
             // Update the hand element for the current player
             // Get the leading suit from the first card played in this trick
-            const leadingSuit = this.cardsPlayed > 0 ? 
-                Card.fromCardContentDivElement(document.querySelector('.play-area .card:first-child .card-content')).suit : null;
+            let leadingSuit = null;
+            if (this.playerForPlayedCardMap.size > 1) { // If there's more than one card (the one we just played)
+                // Get the first card that was played (not the one we just played)
+                const firstCard = Array.from(this.playerForPlayedCardMap.keys())[0];
+                if (firstCard !== card) { // Make sure we're not getting the card we just played
+                    leadingSuit = firstCard.suit;
+                }
+            }
+            
             this.currentPlayer.updateHandElement(this.game.getSpadesBroken(), leadingSuit);
 
             this.cardsPlayed++; // Increment cardsPlayed
@@ -131,10 +142,17 @@ export class Turn {
     computerPlayCard() {
         const strategy = this.currentPlayer.strategy;
 
+        // Log the player's hand size before playing a card
+        console.log(`${this.currentPlayer.name}'s hand size before playing: ${this.currentPlayer.hand.cards.length}`);
+        console.log(`${this.currentPlayer.name}'s hand:`, this.currentPlayer.hand.cards.map(card => `${card.rank} of ${card.suit}`).join(', '));
+
         // Get the leading card (first card played in the trick)
-        const leadingCardElement = document.querySelector('.play-area .card:first-child .card-content');
-        const leadingCard = leadingCardElement != null 
-            ? Card.fromCardContentDivElement(leadingCardElement) : null;
+        let leadingCard = null;
+        
+        // If cards have been played in this trick, use the first card as the leading card
+        if (this.playerForPlayedCardMap.size > 0) {
+            leadingCard = Array.from(this.playerForPlayedCardMap.keys())[0];
+        }
         
         console.log(`Computer player ${this.currentPlayer.name} is playing with leading suit: ${leadingCard ? leadingCard.suit : 'null'}`);
         
@@ -173,6 +191,16 @@ export class Turn {
         if (!this.game.getSpadesBroken() && playedCard.suit === 'Spades') {
             this.game.setSpadesBroken(true);
         }
+
+        // Log the player's hand size before removing the card
+        console.log(`${this.currentPlayer.name}'s hand size before removing card: ${this.currentPlayer.hand.cards.length}`);
+
+        // Remove the card from the player's hand
+        this.currentPlayer.hand.removeCard(playedCard);
+
+        // Log the player's hand size after removing the card
+        console.log(`${this.currentPlayer.name}'s hand size after removing card: ${this.currentPlayer.hand.cards.length}`);
+        console.log(`${this.currentPlayer.name}'s hand after playing:`, this.currentPlayer.hand.cards.map(card => `${card.rank} of ${card.suit}`).join(', '));
 
         // Create the card element
         const cardElement = document.createElement('div');
@@ -267,10 +295,21 @@ export class Turn {
     }
 
     playNextTurn() {
+        // Add debug logging to track the flow
+        console.log(`playNextTurn called. Cards played: ${this.cardsPlayed}, Current player: ${this.currentPlayer.name}`);
+        
+        // Log all cards played so far
+        console.log("Cards played in this trick:");
+        for (const [card, player] of this.playerForPlayedCardMap.entries()) {
+            console.log(`${player.name} played ${card.rank} of ${card.suit}`);
+        }
+        
         if(this.cardsPlayed >= 4) {
             // All players have played a card, compare and determine the winning player
             const winningCard = compareCardsForTurn(this.playerForPlayedCardMap);
             const winningPlayer = this.playerForPlayedCardMap.get(winningCard);
+            
+            console.log(`Trick complete. Winning card: ${winningCard.rank} of ${winningCard.suit}, Winning player: ${winningPlayer.name}`);
             
             // Find the winning card element
             const winningCardElement = document.querySelector(`.play-area .card.${winningPlayer.name.toLowerCase()}`);
@@ -303,6 +342,8 @@ export class Turn {
                     this.currentPlayerIndex = this.players.findIndex(player => player.name === winningPlayer.name);
                     this.currentPlayer = winningPlayer;
                     
+                    console.log(`Starting new trick. Current player: ${this.currentPlayer.name}`);
+                    
                     // Clear the play area
                     playAreaElement.innerHTML = '';
                     playAreaElement.classList.remove('fade-out');
@@ -319,7 +360,10 @@ export class Turn {
             
             return; // Important: return early to prevent immediate next turn
         } else {
+            // Move to the next player
+            const oldPlayer = this.currentPlayer.name;
             this.setNextPlayerToCurrent();
+            console.log(`Moving to next player. Old player: ${oldPlayer}, New player: ${this.currentPlayer.name}`);
             
             // Play the card for the current player
             this.playCard();
