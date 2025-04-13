@@ -2,7 +2,7 @@
 Online HTML5 spades game experimenting with using [Cline](https://cline.bot/) to build it, and ChatGPT to generate the Cline initialize the Cline rules.
 
 ## Recent Updates (April 13, 2025)
-- Changed hand sorting to display cards in descending order (highest value first) to match how most players read cards from left to right
+- Changed hand sorting to display cards by suit (Spades, Hearts, Diamonds, Clubs) with ranks in descending order within each suit to match how most players read cards from left to right
 - Fixed card comparison logic to correctly identify the highest spade when multiple spades are present
 - Fixed animation tests to work correctly for all player positions
 - Fixed hand sorting test to match the expected card order

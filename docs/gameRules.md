@@ -63,8 +63,9 @@ This file defines the canonical rules for the Spades card game as implemented in
 
 3. **Card Display Order**
 
-   - Cards in a player's hand are sorted in descending order (highest value first).
-   - Cards are sorted by suit first, then by rank within each suit.
+   - Cards in a player's hand are sorted by suit first, then by rank within each suit.
+   - Suits are ordered: Spades, Hearts, Diamonds, Clubs.
+   - Within each suit, cards are sorted in descending order (highest value first).
    - This ordering matches how most players naturally read their hand from left to right.
 
 4. **Player Experience**

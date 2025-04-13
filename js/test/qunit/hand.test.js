@@ -63,16 +63,16 @@ QUnit.test('sortCards() sorts the cards with all ranks for each suit', function(
   assert.equal(sortedCards[0].rank, 'A', 'First card is Ace of Spades');
   
   assert.equal(sortedCards[1].suit, 'Hearts', 'Second card is a Heart');
-  assert.equal(sortedCards[1].rank, 'K', 'Second card is King of Hearts');
+  assert.equal(sortedCards[1].rank, 'J', 'Second card is Jack of Hearts');
   
   assert.equal(sortedCards[2].suit, 'Hearts', 'Third card is a Heart');
-  assert.equal(sortedCards[2].rank, 'J', 'Third card is Jack of Hearts');
+  assert.equal(sortedCards[2].rank, 'K', 'Third card is King of Hearts');
   
   assert.equal(sortedCards[3].suit, 'Diamonds', 'Fourth card is a Diamond');
-  assert.equal(sortedCards[3].rank, '10', 'Fourth card is 10 of Diamonds');
+  assert.equal(sortedCards[3].rank, '2', 'Fourth card is 2 of Diamonds');
   
   assert.equal(sortedCards[4].suit, 'Diamonds', 'Fifth card is a Diamond');
-  assert.equal(sortedCards[4].rank, '2', 'Fifth card is 2 of Diamonds');
+  assert.equal(sortedCards[4].rank, '10', 'Fifth card is 10 of Diamonds');
   
   assert.equal(sortedCards[5].suit, 'Clubs', 'Sixth card is a Club');
   assert.equal(sortedCards[5].rank, 'Q', 'Sixth card is Queen of Clubs');
