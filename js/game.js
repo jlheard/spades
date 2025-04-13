@@ -10,7 +10,16 @@ export class Game {
         this.deck = new Deck();
         this.initializePlayers();
         this.scoreThreshold = 500;
-        this.currentScore = 0;        
+        this.currentScore = 0;
+        this.spadesBroken = false;
+    }
+
+    getSpadesBroken() {
+        return this.spadesBroken;
+    }
+
+    setSpadesBroken(value) {
+        this.spadesBroken = value;
     }
 
     initializePlayers() {

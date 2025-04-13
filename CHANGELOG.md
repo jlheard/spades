@@ -12,6 +12,13 @@ All notable changes to the Spades project will be documented in this file.
 - Changed hand sorting to display cards in descending order (highest value first) to match how most players read cards from left to right
 
 ### Fixed
+- Fixed critical bug where spadesBroken flag was incorrectly reset after each trick, causing valid plays to run out
+- Moved spadesBroken state from Turn to Game class for better architectural design and state persistence
+
+### Future Considerations
+- Consider implementing a dedicated GameState engine to manage all game state in a centralized, consistent manner
+
+### Additional Fixes
 - Fixed rule enforcement bug: Players can now play spades when they don't have the leading suit
 - Fixed card value display during winning animation
 - Fixed integration tests for "Complete trick flow with rule enforcement"

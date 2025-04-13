@@ -4,6 +4,12 @@
 
 We've made progress on improving the user experience by changing the hand sorting to display cards in descending order (highest value first), which matches how most players naturally read their hand from left to right. This change has been documented in CHANGELOG.md, README.md, and docs/gameRules.md.
 
+We've identified a critical bug in the spades breaking logic. The spadesBroken flag is incorrectly reset to false at the end of each trick in turn.js, which contradicts the game rules. Once spades are broken, they should remain broken for the rest of the game.
+
+We're implementing an architectural improvement by moving the spadesBroken state from the Turn class to the Game class, which is a more appropriate location for game-wide state that persists across turns.
+
+In the future, we may consider implementing a dedicated GameState engine to manage all game state in a centralized manner, but for now, moving the state to the Game class is a pragmatic improvement that addresses the immediate issue.
+
 The immediate goal is to continue addressing specific gameplay issues identified during testing. We've successfully migrated to QUnit for testing, but have discovered two critical issues that need to be fixed:
 
 1. **Rule Enforcement Bug**: Players cannot play spades when they don't have the leading suit (clubs), which contradicts the game rules.

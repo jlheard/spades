@@ -4,15 +4,15 @@ import { compareCardsForTurn } from './cardComparer.js';
 import { PlayStrategy } from './stratagies/play/playStrategy.js';
 
 export class Turn {
-    constructor(players, playerHandElement) {
-        this.players = players;
+    constructor(game, playerHandElement) {
+        this.game = game;
+        this.players = game.players;
         this.playerHandElement = playerHandElement;
         this.currentPlayerIndex = 0;
         this.currentPlayer = this.players[this.currentPlayerIndex];
         this.selectedCard = null;
         this.cardNotPlayed = true;
         this.cardsPlayed = 0;
-        this.spadesBroken = false;
         this.playerForPlayedCardMap = new Map(); // Map to track played cards and corresponding players
 
         this.playerHandElement.addEventListener('click', this.handleCardClick.bind(this));
@@ -68,7 +68,7 @@ export class Turn {
         const leadingSuit = this.cardsPlayed > 0 ? 
             Card.fromCardContentDivElement(document.querySelector('.play-area .card:first-child .card-content')).suit : null;
         
-        if (leadingSuit === null && card.suit === 'Spades' && !this.spadesBroken) {
+        if (leadingSuit === null && card.suit === 'Spades' && !this.game.getSpadesBroken()) {
             reason = "Can't lead with Spades until they're broken";
         } else if (leadingSuit !== null && card.suit !== leadingSuit && 
                 this.currentPlayer.hand.cards.some(c => c.suit === leadingSuit)) {
@@ -99,9 +99,9 @@ export class Turn {
             // Track the played card and corresponding player
             this.playerForPlayedCardMap.set(card, this.currentPlayer);
 
-            if(!this.spadesBroken && card.suit === 'Spades') {
+            if(!this.game.getSpadesBroken() && card.suit === 'Spades') {
                 console.log(`Spades broken by ${this.currentPlayer.name}`);
-                this.spadesBroken = true
+                this.game.setSpadesBroken(true);
             }            
 
             this.selectedCard = null;
@@ -111,7 +111,7 @@ export class Turn {
             // Get the leading suit from the first card played in this trick
             const leadingSuit = this.cardsPlayed > 0 ? 
                 Card.fromCardContentDivElement(document.querySelector('.play-area .card:first-child .card-content')).suit : null;
-            this.currentPlayer.updateHandElement(this.spadesBroken, leadingSuit);
+            this.currentPlayer.updateHandElement(this.game.getSpadesBroken(), leadingSuit);
 
             this.cardsPlayed++; // Increment cardsPlayed
         }
@@ -138,12 +138,12 @@ export class Turn {
         
         console.log(`Computer player ${this.currentPlayer.name} is playing with leading suit: ${leadingCard ? leadingCard.suit : 'null'}`);
         
-        const playedCard = strategy.playCard(this.playerForPlayedCardMap, leadingCard, this.spadesBroken);
+        const playedCard = strategy.playCard(this.playerForPlayedCardMap, leadingCard, this.game.getSpadesBroken());
         
         console.log(`Computer player ${this.currentPlayer.name} played ${playedCard.rank} of ${playedCard.suit}`);
 
-        if (!this.spadesBroken && playedCard.suit === 'Spades') {
-            this.spadesBroken = true;
+        if (!this.game.getSpadesBroken() && playedCard.suit === 'Spades') {
+            this.game.setSpadesBroken(true);
         }
 
         const cardElement = document.createElement('div');
@@ -210,7 +210,7 @@ export class Turn {
                     // Reset for next trick
                     this.playerForPlayedCardMap.clear();
                     this.cardsPlayed = 0;
-                    this.spadesBroken = false;
+                    // Removed: this.spadesBroken = false; - Spades should remain broken
                     
                     // Set the current player index to the winner
                     this.currentPlayerIndex = this.players.findIndex(player => player.name === winningPlayer.name);
@@ -222,7 +222,7 @@ export class Turn {
                     
                     // Update the hand element for the human player
                     // No leading suit at the start of a new trick
-                    this.players[0].updateHandElement(this.spadesBroken, null);
+                    this.players[0].updateHandElement(this.game.getSpadesBroken(), null);
                     
                     // Continue with next trick
                     this.playCard();

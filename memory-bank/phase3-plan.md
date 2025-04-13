@@ -24,6 +24,9 @@ Phase 3 will focus on enhancing the game's user experience, improving AI strateg
 - Add personality traits to AI players (aggressive, conservative, etc.)
 
 ### 3. Game Mechanics Improvements
+- Implement a dedicated GameState engine to centralize state management
+- Create clear state transitions for game progression
+- Improve testability of game state
 - Add bidding functionality
 - Implement nil bids and scoring
 - Add game variants (e.g., Suicide Spades, Mirror, Partnership)

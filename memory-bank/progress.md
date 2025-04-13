@@ -15,6 +15,8 @@ This document provides a summary of the current progress, goals, and future step
 - **Card Logic**:
   - Card comparison and game flow are functioning based on the rules, but there are edge cases that aren't handled correctly.
   - The rule that "If a player has no cards in the suit led, they may play any card, including jokers and spades" is not being properly enforced.
+  - **Critical Bug**: Identified and fixed issue where spadesBroken flag was incorrectly reset after each trick, causing valid plays to run out.
+  - **Architectural Improvement**: Moved spadesBroken state from Turn to Game class for better design and state persistence.
 
 - **UI/UX**:
   - Changed hand sorting to display cards in descending order (highest value first) to match how most players read cards from left to right. This change has been documented in CHANGELOG.md, README.md, and docs/gameRules.md.
@@ -118,6 +120,12 @@ This document provides a summary of the current progress, goals, and future step
 3. **Refine Game Rules and Complexity**:
    - Consider adding more advanced features such as the inclusion of Jokers (Big and Extra), along with the exclusion of 2 of Clubs and 2 of Hearts, as per the updated rules.
    - Refine the existing rule set to ensure balance and fairness, based on player feedback.
+
+4. **State Management Improvements**:
+   - Consider implementing a dedicated GameState engine to centralize state management
+   - This would provide a single source of truth for game state
+   - Would make state transitions more explicit and easier to track
+   - Could include state for spades breaking, bidding, scoring, and game progression
 
 ---
 

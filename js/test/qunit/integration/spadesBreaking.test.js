@@ -24,8 +24,8 @@ QUnit.module('Integration - Spades Breaking Rule', {
     
     // Create a custom Turn class for testing that doesn't auto-play computer cards
     this.TestTurn = class extends Turn {
-      constructor(players, playerHandElement) {
-        super(players, playerHandElement);
+      constructor(game, playerHandElement) {
+        super(game, playerHandElement);
         // Reset cardsPlayed to 0 since the constructor might have triggered computer plays
         this.cardsPlayed = 0;
       }
@@ -54,14 +54,14 @@ QUnit.test('Spades cannot be led until broken', function(assert) {
   ]);
   
   // Create a turn instance with spades not broken
-  const turn = new this.TestTurn(this.game.players, this.mockPlayerHandElement);
-  turn.spadesBroken = false;
+  const turn = new this.TestTurn(this.game, this.mockPlayerHandElement);
+  this.game.setSpadesBroken(false);
   turn.currentPlayerIndex = 0;
   turn.currentPlayer = this.game.players[0];
   turn.cardsPlayed = 0; // First card to be played (leading)
   
   // Update the hand element with valid plays
-  this.game.players[0].populateHandElement(this.mockPlayerHandElement, turn.spadesBroken);
+  this.game.players[0].populateHandElement(this.mockPlayerHandElement, this.game.getSpadesBroken());
   
   // Get the spades cards
   const spadesCards = Array.from(this.mockPlayerHandElement.querySelectorAll('.card'))
@@ -116,8 +116,8 @@ QUnit.test('Spades are properly broken when played off-suit', function(assert) {
   ]);
   
   // Create a turn instance with spades not broken
-  const turn = new this.TestTurn(this.game.players, this.mockPlayerHandElement);
-  turn.spadesBroken = false;
+  const turn = new this.TestTurn(this.game, this.mockPlayerHandElement);
+  this.game.setSpadesBroken(false);
   turn.currentPlayerIndex = 0;
   turn.currentPlayer = this.game.players[0];
   
@@ -132,7 +132,7 @@ QUnit.test('Spades are properly broken when played off-suit', function(assert) {
   turn.cardsPlayed = 1;
   
   // Update the hand element with valid plays for following suit
-  this.game.players[0].populateHandElement(this.mockPlayerHandElement, turn.spadesBroken, 'Clubs');
+  this.game.players[0].populateHandElement(this.mockPlayerHandElement, this.game.getSpadesBroken(), 'Clubs');
   
   // Since the player has no clubs, all cards should be valid plays
   const allCards = Array.from(this.mockPlayerHandElement.querySelectorAll('.card'));
@@ -173,7 +173,7 @@ QUnit.test('Spades are properly broken when played off-suit', function(assert) {
   turn.handleCardClick(clickEvent2);
   
   // Assert that spades are now broken
-  assert.ok(turn.spadesBroken, 'Spades should be broken after playing a spade off-suit');
+  assert.ok(turn.game.getSpadesBroken(), 'Spades should be broken after playing a spade off-suit');
 });
 
 // Test that spades can be led after being broken
@@ -187,14 +187,14 @@ QUnit.test('Spades can be led after being broken', function(assert) {
   ]);
   
   // Create a turn instance with spades broken
-  const turn = new this.TestTurn(this.game.players, this.mockPlayerHandElement);
-  turn.spadesBroken = true; // Spades are already broken
+  const turn = new this.TestTurn(this.game, this.mockPlayerHandElement);
+  this.game.setSpadesBroken(true); // Spades are already broken
   turn.currentPlayerIndex = 0;
   turn.currentPlayer = this.game.players[0];
   turn.cardsPlayed = 0; // First card to be played (leading)
   
   // Update the hand element with valid plays
-  this.game.players[0].populateHandElement(this.mockPlayerHandElement, turn.spadesBroken);
+  this.game.players[0].populateHandElement(this.mockPlayerHandElement, this.game.getSpadesBroken());
   
   // Get the spades cards
   const spadesCards = Array.from(this.mockPlayerHandElement.querySelectorAll('.card'))
@@ -236,8 +236,8 @@ QUnit.test('UI correctly shows valid/invalid plays based on spades status', func
   ]);
   
   // Create a turn instance with spades not broken
-  const turn = new this.TestTurn(this.game.players, this.mockPlayerHandElement);
-  turn.spadesBroken = false;
+  const turn = new this.TestTurn(this.game, this.mockPlayerHandElement);
+  this.game.setSpadesBroken(false);
   turn.currentPlayerIndex = 0;
   turn.currentPlayer = this.game.players[0];
   
@@ -245,7 +245,7 @@ QUnit.test('UI correctly shows valid/invalid plays based on spades status', func
   turn.cardsPlayed = 0;
   
   // Update the hand element with valid plays
-  this.game.players[0].populateHandElement(this.mockPlayerHandElement, turn.spadesBroken);
+  this.game.players[0].populateHandElement(this.mockPlayerHandElement, this.game.getSpadesBroken());
   
   // Get all cards
   const allCards = Array.from(this.mockPlayerHandElement.querySelectorAll('.card'));
@@ -274,10 +274,10 @@ QUnit.test('UI correctly shows valid/invalid plays based on spades status', func
   });
   
   // Now break spades and test again
-  turn.spadesBroken = true;
+  this.game.setSpadesBroken(true);
   
   // Update the hand element with valid plays
-  this.game.players[0].populateHandElement(this.mockPlayerHandElement, turn.spadesBroken);
+  this.game.players[0].populateHandElement(this.mockPlayerHandElement, this.game.getSpadesBroken());
   
   // Get all cards again (they've been recreated)
   const allCardsAfterBreaking = Array.from(this.mockPlayerHandElement.querySelectorAll('.card'));
@@ -299,7 +299,7 @@ QUnit.test('UI correctly shows valid/invalid plays based on spades status', func
   this.mockPlayArea.appendChild(heartsCardElement);
   
   // Update the hand element with valid plays for following suit
-  this.game.players[0].populateHandElement(this.mockPlayerHandElement, turn.spadesBroken, 'Hearts');
+  this.game.players[0].populateHandElement(this.mockPlayerHandElement, this.game.getSpadesBroken(), 'Hearts');
   
   // Get all cards again (they've been recreated)
   const allCardsFollowingSuit = Array.from(this.mockPlayerHandElement.querySelectorAll('.card'));

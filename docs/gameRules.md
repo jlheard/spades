@@ -24,6 +24,7 @@ This file defines the canonical rules for the Spades card game as implemented in
    - Jokers beat all other cards, including spades.
    - Big Joker > Little Joker > any Spade > all other suits.
    - You cannot lead with spades until they have been "broken" (played in a previous trick by another player).
+   - Once spades have been "broken", they remain broken for the remainder of the game.
    - Jokers **can** be played anytime the player cannot follow suit.
 
 4. **Leading and Following Suit**
