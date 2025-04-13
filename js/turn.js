@@ -159,6 +159,14 @@ export class Turn {
 
         this.cardsPlayed++;
 
+        // Update the human player's hand to reflect the new leading suit
+        // This is especially important when a computer player leads a trick
+        if (this.cardsPlayed === 1) {
+            // This is the first card played in the trick, so it's the leading suit
+            console.log(`Computer player ${this.currentPlayer.name} led with ${playedCard.suit}, updating human player's hand`);
+            this.players[0].updateHandElement(this.game.getSpadesBroken(), playedCard.suit);
+        }
+
         this.playNextTurn();
     }
 

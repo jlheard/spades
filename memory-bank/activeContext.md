@@ -31,6 +31,12 @@ We will prioritize fixing the rule enforcement issue first, followed by the UI/a
    - But the card value doesn't display properly during the animation
    - Integration test #14 "Animation works for all player positions" is failing
 
+3. **Leading Suit Validation Bug**:
+   - When a computer player leads a trick, the human player's hand doesn't update to show only cards of the leading suit as valid
+   - Example: East player leads with a diamond, but hearts and clubs are still shown as valid plays
+   - Human player can play off-suit cards (like Ace of clubs) even when they have cards of the leading suit
+   - Root cause: computerPlayCard() method doesn't update the human player's hand after a computer player leads
+
 ## Implementation Plan
 
 ### Phase 1: Complete Unit Test Suite

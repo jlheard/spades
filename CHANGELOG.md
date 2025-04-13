@@ -4,6 +4,10 @@ All notable changes to the Spades project will be documented in this file.
 
 ## [Unreleased]
 
+### Fixed
+- Fixed critical bug where human player's hand wasn't updating correctly when a computer player led a trick, allowing invalid plays
+- Added integration tests for leading suit validation to prevent regression
+
 ### Changed
 - Migrated testing framework from custom solution to QUnit
 - Rewrote integration tests for trick flow and animation
