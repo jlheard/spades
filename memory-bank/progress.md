@@ -10,6 +10,8 @@ This document provides a summary of the current progress, goals, and future step
   - The core game rules are mostly implemented but we've identified specific issues during gameplay testing:
     - **Critical Bug**: Players cannot play spades when they don't have the leading suit (clubs), which contradicts the game rules. ✅ FIXED
     - **Critical Bug**: Human player's hand wasn't updating correctly when a computer player led a trick, allowing invalid plays. ✅ FIXED
+    - **Critical Bug**: Incorrect card comparison logic sometimes caused lower-ranked cards to incorrectly win tricks. ✅ FIXED
+    - **Critical Bug**: Game would crash when players had 5 or fewer cards in their hand. ✅ FIXED
     - **UI Issue**: The winning card animation works, but the value of the card isn't displayed properly.
   - These issues need to be fixed to ensure the game follows the official rules as documented in `docs/gameRules.md`.
 

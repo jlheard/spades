@@ -37,6 +37,17 @@ We will prioritize fixing the rule enforcement issue first, followed by the UI/a
    - Human player can play off-suit cards (like Ace of clubs) even when they have cards of the leading suit
    - Root cause: computerPlayCard() method doesn't update the human player's hand after a computer player leads
 
+4. **Card Comparison Bug**:
+   - In some cases, lower-ranked cards incorrectly win tricks
+   - Example: 5 of diamonds beats 10 of diamonds
+   - This is particularly noticeable with the West player's cards
+   - Root cause: The card comparison logic in cardComparer.js needs to be more explicit
+
+5. **Game Crash with Few Cards**:
+   - Towards the end of a round, when players have 5 or fewer cards in their hand, the game crashes
+   - Error: "Uncaught TypeError: Cannot read properties of null (reading 'rank')" at Turn.computerPlayCard
+   - Root cause: The strategy classes can return null when there are no valid plays, and the Turn class doesn't handle this case
+
 ## Implementation Plan
 
 ### Phase 1: Complete Unit Test Suite

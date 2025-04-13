@@ -138,25 +138,57 @@ export class Turn {
         
         console.log(`Computer player ${this.currentPlayer.name} is playing with leading suit: ${leadingCard ? leadingCard.suit : 'null'}`);
         
+        // Get the card to play from the strategy
         const playedCard = strategy.playCard(this.playerForPlayedCardMap, leadingCard, this.game.getSpadesBroken());
         
+        // Check if playedCard is null or undefined (this could happen if there are no valid plays)
+        if (!playedCard) {
+            console.error(`Error: ${this.currentPlayer.name} has no valid plays!`);
+            
+            // Handle the error gracefully - create a fallback card if needed
+            // This is a safety measure to prevent the game from crashing
+            const fallbackCard = this.getFallbackCard();
+            
+            if (fallbackCard) {
+                console.log(`Using fallback card: ${fallbackCard.rank} of ${fallbackCard.suit}`);
+                this.handleComputerCardPlay(fallbackCard);
+            } else {
+                console.error("No fallback card available. Ending the trick early.");
+                // End the trick early if we can't find a card to play
+                this.endTrickEarly();
+            }
+            return;
+        }
+        
+        // Log the played card
         console.log(`Computer player ${this.currentPlayer.name} played ${playedCard.rank} of ${playedCard.suit}`);
-
+        
+        // Handle the played card
+        this.handleComputerCardPlay(playedCard);
+    }
+    
+    // Helper method to handle a computer player's card play
+    handleComputerCardPlay(playedCard) {
+        // Check if spades are broken
         if (!this.game.getSpadesBroken() && playedCard.suit === 'Spades') {
             this.game.setSpadesBroken(true);
         }
 
+        // Create the card element
         const cardElement = document.createElement('div');
         cardElement.classList.add('card');
         cardElement.classList.add(this.currentPlayer.name.toLowerCase());
         cardElement.classList.add(`suit-${playedCard.suit.toLowerCase()}`);
         cardElement.innerHTML = `<div class="card-content">${playedCard.rank}&nbsp;${getSuitSymbol(playedCard.suit)}</div>`;
 
+        // Add the card to the play area
         const playAreaElement = document.querySelector('.play-area');
         playAreaElement.appendChild(cardElement);
 
+        // Track the played card
         this.playerForPlayedCardMap.set(playedCard, this.currentPlayer);
 
+        // Increment the cards played counter
         this.cardsPlayed++;
 
         // Update the human player's hand to reflect the new leading suit
@@ -167,7 +199,54 @@ export class Turn {
             this.players[0].updateHandElement(this.game.getSpadesBroken(), playedCard.suit);
         }
 
+        // Move to the next turn
         this.playNextTurn();
+    }
+    
+    // Helper method to get a fallback card if the strategy returns null
+    getFallbackCard() {
+        // Try to find any card in the player's hand
+        if (this.currentPlayer.hand.cards.length > 0) {
+            return this.currentPlayer.hand.cards[0];
+        }
+        return null;
+    }
+    
+    // Helper method to end a trick early if we can't find a card to play
+    endTrickEarly() {
+        // If we have at least one card played, we can end the trick
+        if (this.cardsPlayed > 0) {
+            // Determine the winning card and player
+            const winningCard = compareCardsForTurn(this.playerForPlayedCardMap);
+            const winningPlayer = this.playerForPlayedCardMap.get(winningCard);
+            
+            // Update books
+            this.updateBooks(winningPlayer);
+            
+            // Reset for next trick
+            this.playerForPlayedCardMap.clear();
+            this.cardsPlayed = 0;
+            
+            // Set the current player to the winner
+            this.currentPlayerIndex = this.players.findIndex(player => player.name === winningPlayer.name);
+            this.currentPlayer = winningPlayer;
+            
+            // Clear the play area
+            const playAreaElement = document.querySelector('.play-area');
+            playAreaElement.innerHTML = '';
+            
+            // Update the hand element for the human player
+            this.players[0].updateHandElement(this.game.getSpadesBroken(), null);
+            
+            // Continue with next trick
+            this.playCard();
+            this.cardNotPlayed = !this.currentPlayer.isComputer;
+        } else {
+            // If no cards have been played, just move to the next player
+            this.setNextPlayerToCurrent();
+            this.playCard();
+            this.cardNotPlayed = !this.currentPlayer.isComputer;
+        }
     }
 
     updateBooks(winningPlayer) {

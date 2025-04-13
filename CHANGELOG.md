@@ -6,7 +6,11 @@ All notable changes to the Spades project will be documented in this file.
 
 ### Fixed
 - Fixed critical bug where human player's hand wasn't updating correctly when a computer player led a trick, allowing invalid plays
-- Added integration tests for leading suit validation to prevent regression
+- Fixed incorrect card comparison logic that sometimes caused lower-ranked cards to incorrectly win tricks
+- Fixed card comparison logic to correctly handle spades and jokers, ensuring Ace of Spades beats King of Spades, Queen of Spades beats 2 of Spades, and jokers beat all other cards
+- Fixed game crash that occurred when players had 5 or fewer cards in their hand
+- Added comprehensive error handling to prevent null reference errors
+- Added integration tests for leading suit validation and card comparison to prevent regression
 
 ### Changed
 - Migrated testing framework from custom solution to QUnit

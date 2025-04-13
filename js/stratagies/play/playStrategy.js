@@ -20,9 +20,18 @@ export class PlayStrategy {
     }
 
     chooseCardToPlay(validPlays, playerForPlayedCardMap, leadingCard) {
-        // If there are no valid plays, return null
+        // If there are no valid plays, check if the player has any cards left
         if (!validPlays || validPlays.length === 0) {
-            console.log("No valid plays available");
+            console.log(`No valid plays available for ${this.player.name}`);
+            
+            // If the player has cards in their hand, use the first one as a fallback
+            if (this.player.hand.cards.length > 0) {
+                console.log(`Using fallback card from hand: ${this.player.hand.cards[0].rank} of ${this.player.hand.cards[0].suit}`);
+                return this.player.hand.cards[0];
+            }
+            
+            // This should never happen, but if it does, log an error
+            console.error(`${this.player.name} has no cards left in hand!`);
             return null;
         }
         
